@@ -102,3 +102,15 @@ dist
 
 # TernJS port file
 .tern-port
+
+# WASM
+target/
+**/*.rs.bk
+Cargo.lock
+bin/
+pkg/
+wasm-pack.log
+
+# Project specific
+/public
+

@@ -1,0 +1,7 @@
+/public
+/node_modules
+package.json
+/src_for_wasm
+yarn-error.log
+yarn.lock
+package-lock.json
