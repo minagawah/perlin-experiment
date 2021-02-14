@@ -18,8 +18,6 @@ impl Store {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
     pub id: String,
-    pub width: u32,
-    pub height: u32,
     pub color: String,
     pub color2: String,
 }

@@ -1,6 +1,6 @@
 {
   "name": "perlin-experiment",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": false,
   "description": "A tiny WASM animation using Perlin Noise",
   "main": "public/index.html",
@@ -11,7 +11,7 @@
     "build:js": "webpack --config webpack.prod.js",
     "build:wasm:debug": "sh ./build.sh perlin-wave debug",
     "build:wasm": "sh ./build.sh perlin-wave release",
-    "build": "rm -fR ./public & $npm_execpath run build:wasm & $npm_execpath run build:js"
+    "build": "$npm_execpath run build:wasm & $npm_execpath run build:js"
   },
   "repository": "https://github.com/minagawah/perlin-experiment.git",
   "keywords": [

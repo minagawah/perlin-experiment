@@ -5,10 +5,11 @@ use rand::{self, Rng};
 use std::cell::RefCell;
 use std::fmt::Display;
 use std::rc::Rc;
+use web_sys::HtmlElement;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
-use crate::constants::SEGMENTS;
+use crate::constants::{CANVAS_RATIO, SEGMENTS};
 use crate::exit;
 use crate::graphics::Graphics;
 use crate::perlin::noise_2d;
@@ -21,29 +22,38 @@ pub struct App {
     g: Graphics,
     points: Vec<Point>,
     points_prev: Vec<Point>,
-    width: f64,
-    height: f64,
+    wrapper: HtmlElement,
     store: Rc<RefCell<Store>>,
 }
 
 impl App {
     pub fn new(config: &Config) -> Self {
         let id: String = config.id.clone();
-        let width: u32 = config.width;
-        let height: u32 = config.height;
-        let color: &str = config.color.as_str();
-        let color2: &str = config.color2.as_str();
+        let color: String = config.color.clone();
+        let color2: String = config.color2.clone();
 
-        let g: Graphics = Graphics::new(id.as_str(), width, height, color, color2);
-        let store: Rc<RefCell<Store>> = Rc::new(RefCell::new(Store { is_wave: false }));
+        let wrapper: HtmlElement = get_wrapper_element(id.as_str());
+        let wrapper_w: f64 = wrapper.offset_width() as f64; // i32
+        let wrapper_h: f64 = wrapper_w as f64 / CANVAS_RATIO;
+
+        web_sys::console::log_1(&(format!(">> {} x {}", wrapper_w, wrapper_h).into()));
+
+        let g: Graphics = Graphics::new(
+            id.as_str(),
+            wrapper_w,
+            wrapper_h,
+            color.as_str(),
+            color2.as_str()
+        );
+
+        let store: Rc<RefCell<Store>> = Rc::new(RefCell::new(Store::new()));
 
         Self {
             id,
             g,
             points: vec![],
             points_prev: vec![],
-            width: width as f64,
-            height: height as f64,
+            wrapper,
             store,
         }
     }
@@ -57,9 +67,7 @@ impl App {
                 exit("bad!");
             }
         }) as Box<dyn FnMut()>);
-
-        let el = get_wrapper_element(self.id.as_str());
-        el.set_onclick(Some(f.as_ref().unchecked_ref()));
+        self.wrapper.set_onclick(Some(f.as_ref().unchecked_ref()));
         f.forget();
     }
 
@@ -75,13 +83,13 @@ impl App {
         let offset = rng.gen_range(0, 10) as f64;
         for i in 0..SEGMENTS {
             let ratio = i as f64 / SEGMENTS as f64;
-            let x: f64 = 0_f64.lerp(self.width, ratio);
+            let x: f64 = 0_f64.lerp(self.g.width, ratio);
             let nx: f64 = x + offset;
             let y: f64 = noise_2d(nx, offset);
             self.points[i] = Point { x: x, y: y };
         }
 
-        self.g.reset(self.width, self.height);
+        self.g.reset(self.g.width, self.g.height);
     }
 
     pub fn draw(self: &mut App, counter: u32) {

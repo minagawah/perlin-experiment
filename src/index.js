@@ -9,12 +9,8 @@ const WASM_PATH =
 
 init(WASM_PATH)
   .then(() => {
-    console.log('WASM is awesome!');
-
     PerlinWave.run({
       id: 'wave',
-      width: 540,
-      height: 220,
       color: '#757703', // khaki
       color2: '#d3d626', // mustard
     });
