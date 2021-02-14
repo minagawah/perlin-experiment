@@ -248,8 +248,6 @@ init(WASM_PATH)
   .then(() => {
     PerlinWave.run({
       id: 'wave',
-      width: 540,
-      height: 220,
       color: '#757703',
       color2: '#d3d626',
     });

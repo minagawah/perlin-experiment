@@ -12,8 +12,8 @@ use crate::utils::{create_canvas, ease_in_out_quad};
 pub struct Graphics {
     pub canvas: web_sys::HtmlCanvasElement,
     ctx: web_sys::CanvasRenderingContext2d,
-    width: f64,
-    height: f64,
+    pub width: f64,
+    pub height: f64,
     control_height: f64,
     graph_height: f64,
     color: String,
@@ -22,10 +22,10 @@ pub struct Graphics {
 }
 
 impl Graphics {
-    pub fn new(id: &str, width: u32, height: u32, color: &str, color2: &str) -> Self {
+    pub fn new(id: &str, width: f64, height: f64, color: &str, color2: &str) -> Self {
         let canvas = create_canvas(id);
-        canvas.set_width(width);
-        canvas.set_height(height);
+        canvas.set_width(width as u32);
+        canvas.set_height(height as u32);
 
         let ctx = canvas
             .get_context("2d")
@@ -34,18 +34,16 @@ impl Graphics {
             .dyn_into::<web_sys::CanvasRenderingContext2d>()
             .unwrap();
 
-        let control_height: f64 = (height as f64) * CONTROL_PANEL_RATIO;
-        let graph_height: f64 = (height as f64) - control_height;
+        let control_height: f64 = height * CONTROL_PANEL_RATIO;
+        let graph_height: f64 = height - control_height;
         let font_size: u32 = (control_height * 1.1) as u32;
         let font_style: String = format!("{}px serif", font_size);
-
-        // web_sys::console::log_1(&(format!("{}", font_style).into()));
 
         Self {
             canvas,
             ctx,
-            width: width as f64,
-            height: height as f64,
+            width,
+            height,
             control_height,
             graph_height,
             color: color.into(),

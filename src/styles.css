@@ -26,14 +26,29 @@ code {
 }
 
 #container {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 1em;
+}
+
+#wrapper {
+  width: 100vw;
+  min-width: 65x;
+  max-width: 465px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#wave {
+  width: 100%;
 }
 
 #box-wrapper {
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -64,4 +79,12 @@ code {
 
 .box-2-pink {
   border: 2px solid #ff498c;
+}
+
+#info {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
 }
