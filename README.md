@@ -276,7 +276,7 @@ http://tokyo800.jp/mina/perlin-wave/
 Let's say we feed nothing for `init`, then it would fetch following (which results in 404):  
 http://tokyo800.jp/perlin-wave/perlin-wave_bg.wasm  
 Instead, I want this:  
-http://tokyo800.jp/mina/perlin-wave/wasm/perlin-wave/perlin-wave_bg.wasm
+http://tokyo800.jp/mina/perlin-experiment/wasm/perlin-wave/perlin-wave_bg.wasm
 
 When the path is not given, it will fetch for: `/perlin-wave/perlin-wave_bg.wasm`  
 This is not even close to `/mina/perlin-waves` where I have my assets!!!!  
