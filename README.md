@@ -297,7 +297,7 @@ Currently, I have this:
   },
 ```
 
-Meaning, I am serving the JS assets from: http://tokyo800.jp/mina/perlin-wave/assets  
+Meaning, I am serving the JS assets from: http://tokyo800.jp/mina/perlin-experiment/assets  
 What if, instead of `assets`, I had `/assets`?  
 Well... That would be disasterous...  
 When my HTML page is generated, it will look like this:
