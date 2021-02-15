@@ -14,8 +14,8 @@ pub struct Graphics {
     ctx: web_sys::CanvasRenderingContext2d,
     pub width: f64,
     pub height: f64,
+    display_height: f64,
     control_height: f64,
-    graph_height: f64,
     color: String,
     color2: String,
     font_style: String,
@@ -35,7 +35,7 @@ impl Graphics {
             .unwrap();
 
         let control_height: f64 = height * CONTROL_PANEL_RATIO;
-        let graph_height: f64 = height - control_height;
+        let display_height: f64 = height - control_height;
         let font_size: u32 = (control_height * 1.1) as u32;
         let font_style: String = format!("{}px serif", font_size);
 
@@ -44,8 +44,8 @@ impl Graphics {
             ctx,
             width,
             height,
+            display_height,
             control_height,
-            graph_height,
             color: color.into(),
             color2: color2.into(),
             font_style,
@@ -64,13 +64,14 @@ impl Graphics {
     }
 
     pub fn render_wave(self: &mut Graphics, points: &Vec<Point>, counter: u32) {
-        let half_h: f64 = self.graph_height / 2.0;
+        let half_h: f64 = self.display_height / 2.0;
         self.ctx.set_stroke_style(&self.color.as_str().into());
         self.ctx.begin_path();
         self.ctx.move_to(0.0_f64, half_h);
 
-        let amplify = self.graph_height * 0.5;
+        let amplify = self.amplifier();
         let rel_y: f64 = ease_in_out_quad(self.relative_y_half(counter));
+
         for p in points {
             let y: f64 = 0.0.lerp(p.y, rel_y) * amplify + half_h;
             self.ctx.line_to(p.x, y);
@@ -86,12 +87,13 @@ impl Graphics {
         counter: u32,
     ) {
         let unit_w: f64 = (self.width / SEGMENTS as f64) - 2.0;
-        let half_h: f64 = self.graph_height / 2.0;
+        let half_h: f64 = self.display_height / 2.0;
         self.ctx.set_fill_style(&self.color.as_str().into());
 
-        let amplify = self.graph_height * 0.2;
+        let amplify = self.amplifier();
         let rel_y: f64 = self.relative_y_full(counter);
         let mut i: usize = 0;
+
         for p in points {
             let y: f64 = points_prev[i].y.lerp(p.y, rel_y) * amplify;
             self.ctx.fill_rect(p.x, half_h, unit_w, y);
@@ -105,7 +107,11 @@ impl Graphics {
         self.ctx.set_fill_style(&self.color2.as_str().into());
         self.ctx.set_font(self.font_style.as_str());
         self.ctx
-            .fill_text(text.as_str(), 5.0_f64, self.graph_height + 5.0);
+            .fill_text(text.as_str(), 5.0_f64, self.display_height + 5.0);
+    }
+
+    fn amplifier(self: &mut Graphics) -> f64 {
+        self.display_height * 0.2
     }
 
     fn relative_y_full(self: &mut Graphics, counter: u32) -> f64 {
