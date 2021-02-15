@@ -4,7 +4,8 @@ A tiny WASM animation using Perlin Noise
 
 ![screenshot](screenshot.png)
 
-[View Demo](http://tokyo800.jp/mina/perlin-experiment/)
+[View Demo](http://tokyo800.jp/mina/perlin-experiment/)  
+Click on canvas to toggle the visualization mode (wave/equalizer).
 
 [1. About](#1-about)  
 [2. Dev + Build](#2-dev--build)  
