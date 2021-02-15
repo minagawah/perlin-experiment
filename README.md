@@ -4,7 +4,8 @@ A tiny WASM animation using Perlin Noise
 
 ![screenshot](screenshot.png)
 
-[View Demo](http://tokyo800.jp/mina/perlin-experiment/)
+[View Demo](http://tokyo800.jp/mina/perlin-experiment/)  
+Click on canvas to toggle the visualization mode (wave/equalizer).
 
 [1. About](#1-about)  
 [2. Dev + Build](#2-dev--build)  
@@ -29,16 +30,17 @@ A tiny WASM animation using Perlin Noise
 - Generating an organic looking wave using Perlin Noise
 - Click on canvas to switch visualisation modes (wave/equalizer)
 
-I have the following example apps from the past:
+I have some example apps from the past:
 
 - [wasm-pack-canvas-example](https://github.com/minagawah/wasm-pack-canvas-example)
-  - Exactly the same setup
+  - Has exactly the same setup
 - [iced-dynamic-import-sample](https://github.com/minagawah/iced-dynamic-import-sample)
   - Similar, but it uses `wasm-bindgen` intead of `wasm-pack`
 
-So, the content bellow is basically a repetition of what described in the above previous examples.
+So, the descriptions are almost the same as the ones above,
+and most of what I have in this README is a repetition.
 
-Remember, the key is **_to make a symlink from the JS to the built WASM files._**  
+Yet, remember, the key is **_to make a symlink from the JS to the built WASM files._**  
 When Webpack tries to look for `perlin-wave` which is a WASM package,
 Webpack can look up the package because I did `yarn link "perlin-link"`
 in the JS source directory.
