@@ -44,7 +44,6 @@ pub fn start_app(config: &Config) -> Result<String, String> {
     // panic::set_hook(Box::new(console_error_panic_hook::hook));
 
     let mut app = App::new(config);
-    app.init();
 
     let mut counter: u32 = 0;
 

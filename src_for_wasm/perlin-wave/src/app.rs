@@ -5,9 +5,9 @@ use rand::{self, Rng};
 use std::cell::RefCell;
 use std::fmt::Display;
 use std::rc::Rc;
-use web_sys::HtmlElement;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use web_sys::HtmlElement;
 
 use crate::constants::{CANVAS_RATIO, SEGMENTS};
 use crate::exit;
@@ -22,7 +22,6 @@ pub struct App {
     g: Graphics,
     points: Vec<Point>,
     points_prev: Vec<Point>,
-    wrapper: HtmlElement,
     store: Rc<RefCell<Store>>,
 }
 
@@ -32,43 +31,36 @@ impl App {
         let color: String = config.color.clone();
         let color2: String = config.color2.clone();
 
-        let wrapper: HtmlElement = get_wrapper_element(id.as_str());
-        let wrapper_w: f64 = wrapper.offset_width() as f64; // i32
-        let wrapper_h: f64 = wrapper_w as f64 / CANVAS_RATIO;
+        let el: HtmlElement = get_wrapper_element(id.as_str());
+        let width: f64 = el.offset_width() as f64; // i32
+        let height: f64 = width as f64 / CANVAS_RATIO;
 
-        web_sys::console::log_1(&(format!(">> {} x {}", wrapper_w, wrapper_h).into()));
+        web_sys::console::log_1(&(format!(">> {} x {}", width, height).into()));
 
-        let g: Graphics = Graphics::new(
-            id.as_str(),
-            wrapper_w,
-            wrapper_h,
-            color.as_str(),
-            color2.as_str()
-        );
+        let g: Graphics =
+            Graphics::new(id.as_str(), width, height, color.as_str(), color2.as_str());
 
         let store: Rc<RefCell<Store>> = Rc::new(RefCell::new(Store::new()));
+        let store_clone = store.clone();
+
+        let f = Closure::wrap(Box::new(move || {
+            if let Ok(mut s) = store_clone.try_borrow_mut() {
+                s.toggle();
+            } else {
+                exit("bad!");
+            }
+        }) as Box<dyn FnMut()>);
+
+        el.set_onclick(Some(f.as_ref().unchecked_ref()));
+        f.forget();
 
         Self {
             id,
             g,
             points: vec![],
             points_prev: vec![],
-            wrapper,
             store,
         }
-    }
-
-    pub fn init(self: &mut App) {
-        let store_clone = self.store.clone();
-        let f = Closure::wrap(Box::new(move || {
-            if let Ok(mut store) = store_clone.try_borrow_mut() {
-                store.toggle();
-            } else {
-                exit("bad!");
-            }
-        }) as Box<dyn FnMut()>);
-        self.wrapper.set_onclick(Some(f.as_ref().unchecked_ref()));
-        f.forget();
     }
 
     pub fn reset(self: &mut App) {
