@@ -69,6 +69,7 @@ impl App {
         } else {
             vec![Point { x: 0.0, y: 0.0 }; SEGMENTS]
         };
+
         self.points = vec![Point { x: 0.0, y: 0.0 }; SEGMENTS];
 
         let mut rng = rand::thread_rng();
@@ -87,10 +88,13 @@ impl App {
     pub fn draw(self: &mut App, counter: u32) {
         self.g.clear();
         if let Ok(store) = self.store.try_borrow() {
-            if store.is_wave {
-                self.g.render_wave(&self.points, counter);
-            } else {
-                self.g.render_bars(&self.points, &self.points_prev, counter);
+            match store.mode {
+                0 => self.g.render_wave(&self.points, counter),
+                1 => self.g.render_bars(&self.points, &self.points_prev, counter),
+                2 => self
+                    .g
+                    .render_donut(&self.points, &self.points_prev, counter),
+                _ => (),
             }
         } else {
             exit("bad!");
