@@ -5,7 +5,7 @@ A tiny WASM animation using Perlin Noise
 ![screenshot](screenshot.png)
 
 [View Demo](http://tokyo800.jp/mina/perlin-experiment/)  
-Click on canvas to toggle the visualization mode (wave/equalizer).
+Click the canvas to toggle between 3 different visualization modes.
 
 [1. About](#1-about)  
 [2. Dev + Build](#2-dev--build)  
@@ -28,7 +28,7 @@ Click on canvas to toggle the visualization mode (wave/equalizer).
 ## 1. About
 
 - Generating an organic looking wave using Perlin Noise
-- Click on canvas to switch visualisation modes (wave/equalizer)
+- Click the canvas to toggle between 3 different visualization modes (Wave/Equalizer/Solar).
 
 I have some example apps from the past:
 
