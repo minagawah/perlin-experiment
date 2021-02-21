@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
 use crate::constants::{CONTROL_PANEL_RATIO, FILL_COLOR, FULL_CYCLE, SEGMENTS};
-use crate::types::{Donut, Point};
+use crate::types::{Point, Solar};
 use crate::utils::{create_canvas, ease_in_out_quad};
 
 #[derive(Clone, Debug)]
@@ -17,11 +17,10 @@ pub struct Graphics {
     pub height: f64,
     display_height: f64,
     control_height: f64,
-    donut: Donut,
+    solar: Solar,
     color: String,
     color2: String,
     font_style: String,
-    // flag: bool,
 }
 
 impl Graphics {
@@ -48,7 +47,7 @@ impl Graphics {
         let display_height: f64 = height - control_height;
         let font_size: u32 = (control_height * 1.1) as u32;
         let font_style: String = format!("{}px serif", font_size);
-        let donut = Donut::new(height, (SEGMENTS as f64 * 0.4).round());
+        let solar = Solar::new(height, (SEGMENTS as f64 * 0.4).round());
 
         Ok(Self {
             canvas,
@@ -57,11 +56,10 @@ impl Graphics {
             height,
             display_height,
             control_height,
-            donut,
+            solar,
             color: color.into(),
             color2: color2.into(),
             font_style,
-            // flag: false,
         })
     }
 
@@ -124,13 +122,13 @@ impl Graphics {
         self.ctx.restore();
     }
 
-    pub fn render_donut(
+    pub fn render_solar(
         self: &mut Graphics,
         points: &Vec<Point>,
         points_prev: &Vec<Point>,
         counter: u32,
     ) {
-        let dn = self.donut.clone();
+        let sol = self.solar.clone();
         let offset_x = self.width / 2.0;
         let offset_y = self.height / 2.0;
         let rel_pos: f64 = self.relative_pos_full(counter);
@@ -139,13 +137,13 @@ impl Graphics {
         self.ctx.set_fill_style(&self.color.as_str().into());
         self.ctx.translate(offset_x, offset_y).unwrap_or(());
 
-        for i in 0..dn.segments as usize {
+        for i in 0..sol.segments as usize {
             let p = points[i].clone();
-            let angle: f64 = i as f64 * dn.angle_step;
-            let x = dn.radius_inner.round();
+            let angle: f64 = i as f64 * sol.angle_step;
+            let x = sol.radius_inner.round();
             let width: f64 = points_prev[i].normalize().y.lerp(p.normalize().y, rel_pos);
-            let width = 0_f64.lerp(dn.max_length, width).round();
-            let height = dn.size.round();
+            let width = 0_f64.lerp(sol.max_length, width).round();
+            let height = sol.size.round();
             let y = -(height / 2.0).round();
 
             self.ctx.save();
