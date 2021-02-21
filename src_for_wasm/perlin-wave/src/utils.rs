@@ -19,10 +19,10 @@ pub fn request_animation_frame(f: &Closure<dyn FnMut()>) {
 }
 
 pub fn get_wrapper_element(name: &str) -> Result<web_sys::HtmlElement, String> {
-    let elem: web_sys::Element = document()
-        .map_err(|e| e.to_string())?
+    let elem: web_sys::Element = document()?
         .get_element_by_id(name)
         .ok_or(format!("No element: {}", name).to_string())?;
+
     Ok(elem
         .dyn_into::<web_sys::HtmlElement>()
         .map_err(|e| e.to_string())?)
@@ -34,7 +34,9 @@ pub fn create_canvas(name: &str) -> Result<web_sys::HtmlCanvasElement, String> {
         .map_err(|_| "Failed to create canvas".to_string())?
         .dyn_into::<web_sys::HtmlCanvasElement>()
         .map_err(|e| e.to_string())?;
+
     get_wrapper_element(name)?.append_child(&canvas).unwrap();
+
     Ok(canvas)
 }
 
