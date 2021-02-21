@@ -76,7 +76,7 @@ impl Graphics {
 
     pub fn render_wave(self: &mut Graphics, points: &Vec<Point>, counter: u32) {
         let half_h: f64 = self.display_height / 2.0;
-        let amplify = self.amplifier();
+        let amplify = self.amplify_value();
         let rel_pos: f64 = ease_in_out_quad(self.relative_pos_half(counter));
 
         self.ctx.save();
@@ -103,7 +103,7 @@ impl Graphics {
     ) {
         let unit_w: f64 = (self.width / SEGMENTS as f64) - 2.0;
         let half_h: f64 = self.display_height / 2.0;
-        let amplify = self.amplifier();
+        let amplify = self.amplify_value();
         let rel_pos: f64 = self.relative_pos_full(counter);
 
         self.ctx.save();
@@ -165,7 +165,7 @@ impl Graphics {
         self.ctx.restore();
     }
 
-    fn amplifier(self: &mut Graphics) -> f64 {
+    fn amplify_value(self: &mut Graphics) -> f64 {
         self.display_height * 0.2
     }
 
