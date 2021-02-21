@@ -12,9 +12,6 @@ impl Store {
     }
 
     pub fn toggle(&mut self) {
-        // let mode = (self.mode + 1) % 3;
-        // web_sys::console::log_1(&(format!("mode: {}", mode).into()));
-        // self.mode = mode;
         self.mode = (self.mode + 1) % 3;
     }
 }
@@ -42,7 +39,7 @@ impl Point {
 }
 
 #[derive(Clone, Debug)]
-pub struct Donut {
+pub struct Solar {
     pub segments: f64,
     pub margin: f64,
     pub radius: f64,
@@ -52,7 +49,7 @@ pub struct Donut {
     pub angle_step: f64,
 }
 
-impl Donut {
+impl Solar {
     pub fn new(canvas_height: f64, segments: f64) -> Self {
         let angle_step = 360.0 / segments;
         let diameter = canvas_height * 0.9;
@@ -62,7 +59,7 @@ impl Donut {
         let max_length = radius - radius_inner;
         let size = diameter * PI / segments * 0.2;
 
-        Donut {
+        Solar {
             segments,
             margin,
             radius,

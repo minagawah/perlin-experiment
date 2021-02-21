@@ -1,9 +1,6 @@
-#![allow(unused_imports)]
-
 use lerp::Lerp;
 use rand::{self, Rng};
 use std::cell::RefCell;
-use std::fmt::Display;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
@@ -48,7 +45,7 @@ impl App {
             if let Ok(mut s) = store_clone.try_borrow_mut() {
                 s.toggle();
             } else {
-                exit("bad!");
+                exit("Failed to borrow store.clone");
             }
         }) as Box<dyn FnMut()>);
 
@@ -94,11 +91,11 @@ impl App {
                 1 => self.g.render_bars(&self.points, &self.points_prev, counter),
                 2 => self
                     .g
-                    .render_donut(&self.points, &self.points_prev, counter),
+                    .render_solar(&self.points, &self.points_prev, counter),
                 _ => (),
             }
         } else {
-            exit("bad!");
+            exit("Failed to borrow self.store");
         }
         self.g.render_control(&self.points);
     }

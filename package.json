@@ -1,6 +1,6 @@
 {
   "name": "perlin-experiment",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": false,
   "description": "A tiny WASM animation using Perlin Noise",
   "main": "public/index.html",
