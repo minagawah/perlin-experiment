@@ -26,19 +26,20 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(config: &Config) -> Self {
+    pub fn new(config: &Config) -> Result<Self, String> {
         let id: String = config.id.clone();
         let color: String = config.color.clone();
         let color2: String = config.color2.clone();
 
-        let el: HtmlElement = get_wrapper_element(id.as_str());
+        let el: HtmlElement = get_wrapper_element(id.as_str())?;
+
         let width: f64 = el.offset_width() as f64; // i32
         let height: f64 = width as f64 / CANVAS_RATIO;
 
         web_sys::console::log_1(&(format!(">> {} x {}", width, height).into()));
 
         let g: Graphics =
-            Graphics::new(id.as_str(), width, height, color.as_str(), color2.as_str());
+            Graphics::new(id.as_str(), width, height, color.as_str(), color2.as_str())?;
 
         let store: Rc<RefCell<Store>> = Rc::new(RefCell::new(Store::new()));
         let store_clone = store.clone();
@@ -54,13 +55,13 @@ impl App {
         el.set_onclick(Some(f.as_ref().unchecked_ref()));
         f.forget();
 
-        Self {
+        Ok(Self {
             id,
             g,
             points: vec![],
             points_prev: vec![],
             store,
-        }
+        })
     }
 
     pub fn reset(self: &mut App) {

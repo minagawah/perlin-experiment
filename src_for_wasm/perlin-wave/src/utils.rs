@@ -3,38 +3,39 @@ use wasm_bindgen::JsCast;
 // use rand_os::rand_core::RngCore;
 // use rand_os::OsRng;
 
-fn window() -> web_sys::Window {
-    web_sys::window().unwrap()
+fn window() -> Result<web_sys::Window, String> {
+    web_sys::window().ok_or("No window".into())
 }
 
-fn document() -> web_sys::Document {
-    window().document().unwrap()
+fn document() -> Result<web_sys::Document, String> {
+    window()?.document().ok_or("No document".into())
 }
 
 pub fn request_animation_frame(f: &Closure<dyn FnMut()>) {
     window()
+        .unwrap()
         .request_animation_frame(f.as_ref().unchecked_ref())
-        .expect("Failed for requestAnimationFrame");
+        .expect("Failed to start request_animation_frame");
 }
 
-pub fn get_wrapper_element(name: &str) -> web_sys::HtmlElement {
-    document()
+pub fn get_wrapper_element(name: &str) -> Result<web_sys::HtmlElement, String> {
+    let elem: web_sys::Element = document()
+        .map_err(|e| e.to_string())?
         .get_element_by_id(name)
-        .unwrap()
+        .ok_or(format!("No element: {}", name).to_string())?;
+    Ok(elem
         .dyn_into::<web_sys::HtmlElement>()
-        .map_err(|_| ())
-        .unwrap()
+        .map_err(|e| e.to_string())?)
 }
 
-pub fn create_canvas(name: &str) -> web_sys::HtmlCanvasElement {
-    let canvas = document()
+pub fn create_canvas(name: &str) -> Result<web_sys::HtmlCanvasElement, String> {
+    let canvas = document()?
         .create_element("canvas")
-        .unwrap()
+        .map_err(|_| "Failed to create canvas".to_string())?
         .dyn_into::<web_sys::HtmlCanvasElement>()
-        .map_err(|_| ())
-        .unwrap();
-    get_wrapper_element(name).append_child(&canvas).unwrap();
-    canvas
+        .map_err(|e| e.to_string())?;
+    get_wrapper_element(name)?.append_child(&canvas).unwrap();
+    Ok(canvas)
 }
 
 pub fn ease_in_out_quad(v: f64) -> f64 {
