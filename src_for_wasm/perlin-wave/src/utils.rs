@@ -35,7 +35,9 @@ pub fn create_canvas(name: &str) -> Result<web_sys::HtmlCanvasElement, String> {
         .dyn_into::<web_sys::HtmlCanvasElement>()
         .map_err(|e| e.to_string())?;
 
-    get_wrapper_element(name)?.append_child(&canvas).unwrap();
+    get_wrapper_element(name)?
+        .append_child(&canvas)
+        .map_err(|_| "Failed append canvas".to_string())?;
 
     Ok(canvas)
 }
