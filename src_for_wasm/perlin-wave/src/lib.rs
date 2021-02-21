@@ -35,7 +35,7 @@ pub fn run(param: &JsValue) -> JsValue {
         Ok(s) => JsValue::from(s),
         Err(err) => {
             error!("Error: {}", err);
-            JsValue::NULL
+            JsValue::from(err)
         }
     }
 }
@@ -43,7 +43,7 @@ pub fn run(param: &JsValue) -> JsValue {
 pub fn start_app(config: &Config) -> Result<String, String> {
     // panic::set_hook(Box::new(console_error_panic_hook::hook));
 
-    let mut app = App::new(config);
+    let mut app = App::new(config)?;
 
     let mut counter: u32 = 0;
 

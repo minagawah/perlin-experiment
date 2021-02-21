@@ -25,8 +25,15 @@ pub struct Graphics {
 }
 
 impl Graphics {
-    pub fn new(id: &str, width: f64, height: f64, color: &str, color2: &str) -> Self {
-        let canvas = create_canvas(id);
+    pub fn new(
+        id: &str,
+        width: f64,
+        height: f64,
+        color: &str,
+        color2: &str,
+    ) -> Result<Self, String> {
+        let canvas = create_canvas(id)?;
+
         canvas.set_width(width as u32);
         canvas.set_height(height as u32);
 
@@ -43,7 +50,7 @@ impl Graphics {
         let font_style: String = format!("{}px serif", font_size);
         let donut = Donut::new(height, (SEGMENTS as f64 * 0.4).round());
 
-        Self {
+        Ok(Self {
             canvas,
             ctx,
             width,
@@ -55,7 +62,7 @@ impl Graphics {
             color2: color2.into(),
             font_style,
             // flag: false,
-        }
+        })
     }
 
     pub fn reset(self: &mut Graphics, width: f64, height: f64) {
