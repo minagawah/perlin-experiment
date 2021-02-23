@@ -16,11 +16,17 @@ impl Store {
     }
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct PanelConfig {
+    pub id: String,
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
     pub id: String,
     pub color: String,
     pub color2: String,
+    pub panels: Vec<PanelConfig>,
 }
 
 #[derive(Clone, Debug)]

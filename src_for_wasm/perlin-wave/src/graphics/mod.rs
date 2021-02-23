@@ -5,7 +5,7 @@ use std::f64::consts::PI;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
-use crate::constants::{CONTROL_PANEL_RATIO, FILL_COLOR, FULL_CYCLE, SEGMENTS};
+use crate::constants::{CONTROL_PANEL_RATIO, FILL_COLOR, FULL_CYCLE, NORMAL_WIDTH, SEGMENTS};
 use crate::types::{Point, Solar};
 use crate::utils::{create_canvas, ease_in_out_quad};
 
@@ -74,7 +74,7 @@ impl Graphics {
         self.ctx.fill_rect(0.0, 0.0, self.width, self.height);
     }
 
-    pub fn render_wave(self: &mut Graphics, points: &Vec<Point>, counter: u32) {
+    pub fn render_radio(self: &mut Graphics, points: &Vec<Point>, counter: u32) {
         let half_h: f64 = self.display_height / 2.0;
         let amplify = self.amplify_value();
         let rel_pos: f64 = ease_in_out_quad(self.relative_pos_half(counter));
@@ -85,7 +85,8 @@ impl Graphics {
         self.ctx.move_to(0_f64, half_h.round());
 
         for p in points {
-            let x = p.x.round();
+            let ratio = p.x / NORMAL_WIDTH;
+            let x = 0_f64.lerp(self.width, ratio).round();
             let y = (0.0.lerp(p.y, rel_pos) * amplify + half_h).round();
             self.ctx.line_to(x, y);
         }
@@ -111,7 +112,8 @@ impl Graphics {
 
         let mut i: usize = 0;
         for p in points {
-            let x = p.x.round();
+            let ratio = p.x / NORMAL_WIDTH;
+            let x = 0_f64.lerp(self.width, ratio).round();
             let y = (points_prev[i].y.lerp(p.y, rel_pos) * amplify).round();
             let half_h = half_h.round();
             let unit_w = unit_w.round();

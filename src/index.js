@@ -13,6 +13,9 @@ init(WASM_PATH)
       id: 'wave',
       color: '#757703', // khaki
       color2: '#d3d626', // mustard
+      panels: [
+        { id: 'wave' },
+      ],
     });
   })
   .catch(err => {
