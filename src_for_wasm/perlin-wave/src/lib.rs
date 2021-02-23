@@ -1,6 +1,7 @@
 pub mod app;
 pub mod constants;
 pub mod graphics;
+pub mod panels;
 pub mod perlin;
 pub mod types;
 pub mod utils;
