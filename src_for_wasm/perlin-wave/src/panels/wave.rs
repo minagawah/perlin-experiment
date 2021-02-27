@@ -6,27 +6,27 @@ use wasm_bindgen::JsCast;
 use web_sys::HtmlElement;
 
 use crate::constants::CANVAS_RATIO;
-use crate::graphics::waves::WavesGraphics;
+use crate::graphics::wave::WaveGraphics;
 use crate::graphics::Graphics;
-use crate::panels::waves::GraphType::{Bars, Radio, Solar};
+use crate::panels::wave::GraphType::{Bars, Radio, Solar};
 use crate::panels::Panel;
 use crate::types::Point;
 use crate::utils::get_wrapper_element;
 
 #[derive(Clone, Debug)]
-pub struct WavesPanel {
+pub struct WavePanel {
     id: String,
-    g: Rc<RefCell<WavesGraphics>>,
+    g: Rc<RefCell<WaveGraphics>>,
     graph_type: Rc<Cell<GraphType>>,
 }
 
-impl Panel for WavesPanel {
-    fn g(&self) -> Rc<RefCell<WavesGraphics>> {
+impl Panel for WavePanel {
+    fn g(&self) -> Rc<RefCell<WaveGraphics>> {
         self.g.clone()
     }
 }
 
-impl WavesPanel {
+impl WavePanel {
     pub fn new(id: &str, color: &str, color2: &str) -> Result<Self, String> {
         let el: HtmlElement = get_wrapper_element(id)?;
         let width: f64 = el.offset_width() as f64; // i32
@@ -34,7 +34,7 @@ impl WavesPanel {
 
         web_sys::console::log_1(&(format!(">> {} x {}", width, height).into()));
 
-        let g: WavesGraphics = WavesGraphics::new(id, width, height, color, color2)?;
+        let g: WaveGraphics = WaveGraphics::new(id, width, height, color, color2)?;
         let graph_type: Rc<Cell<GraphType>> = Rc::new(Cell::new(GraphType::Radio));
 
         let graph_type_clone = graph_type.clone();

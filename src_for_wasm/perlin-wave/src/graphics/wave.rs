@@ -2,7 +2,6 @@ use core::cell::RefCell;
 use lerp::Lerp;
 use std::f64::consts::PI;
 use std::rc::Rc;
-// use wasm_bindgen::JsCast;
 
 use crate::constants::{CONTROL_PANEL_RATIO, NORMAL_WIDTH, SEGMENTS};
 use crate::types::{Point, Solar};
@@ -11,7 +10,7 @@ use crate::utils::{ease_in_out_quad, get_canvas_ctx};
 use crate::graphics::Graphics;
 
 #[derive(Clone, Debug)]
-pub struct WavesGraphics {
+pub struct WaveGraphics {
     pub canvas: web_sys::HtmlCanvasElement,
     ctx: Rc<RefCell<web_sys::CanvasRenderingContext2d>>,
     pub width: f64,
@@ -24,7 +23,7 @@ pub struct WavesGraphics {
     font_style: String,
 }
 
-impl Graphics for WavesGraphics {
+impl Graphics for WaveGraphics {
     fn ctx(&mut self) -> Rc<RefCell<web_sys::CanvasRenderingContext2d>> {
         self.ctx.clone()
     }
@@ -33,14 +32,14 @@ impl Graphics for WavesGraphics {
     }
 }
 
-impl WavesGraphics {
+impl WaveGraphics {
     pub fn new(
         id: &str,
         width: f64,
         height: f64,
         color: &str,
         color2: &str,
-    ) -> Result<WavesGraphics, String> {
+    ) -> Result<WaveGraphics, String> {
         let (canvas, ctx) = get_canvas_ctx(id, width, height)?;
 
         let control_height: f64 = height * CONTROL_PANEL_RATIO;
@@ -49,7 +48,7 @@ impl WavesGraphics {
         let font_style: String = format!("{}px serif", font_size);
         let solar = Solar::new(height, (SEGMENTS as f64 * 0.4).round());
 
-        Ok(WavesGraphics {
+        Ok(WaveGraphics {
             canvas,
             ctx: Rc::new(RefCell::new(ctx)),
             width,
@@ -72,7 +71,7 @@ impl WavesGraphics {
         self.height = height;
     }
 
-    pub fn render_radio(self: &mut WavesGraphics, points: &Vec<Point>, counter: u32) {
+    pub fn render_radio(self: &mut WaveGraphics, points: &Vec<Point>, counter: u32) {
         let half_h: f64 = self.display_height / 2.0;
         let amplify = self.amplify_value();
         let rel_pos: f64 = ease_in_out_quad(self.relative_pos_half(counter));

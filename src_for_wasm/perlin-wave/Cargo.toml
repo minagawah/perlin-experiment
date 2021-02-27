@@ -1,6 +1,6 @@
 [package]
 name = "perlin-wave"
-version = "0.1.11"
+version = "0.1.12"
 authors = ["Hiroki Minagawa <minagawa@tokyo800.jp>"]
 edition = "2018"
 publish = false

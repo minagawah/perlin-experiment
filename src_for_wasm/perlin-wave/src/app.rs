@@ -2,7 +2,7 @@ use lerp::Lerp;
 use rand::{self, Rng};
 
 use crate::constants::{NORMAL_WIDTH, SEGMENTS};
-use crate::panels::waves::WavesPanel;
+use crate::panels::wave::WavePanel;
 use crate::panels::Panel;
 use crate::perlin::noise_2d;
 use crate::types::{Config, Point};
@@ -11,7 +11,7 @@ use crate::types::{Config, Point};
 pub struct App {
     points: Vec<Point>,
     points_prev: Vec<Point>,
-    panels: Vec<WavesPanel>,
+    panels: Vec<WavePanel>,
 }
 
 impl App {
@@ -21,8 +21,8 @@ impl App {
         let id: String = config.panels[0].id.clone();
 
         let mut panels = vec![];
-        let waves = WavesPanel::new(id.as_str(), color.as_str(), color2.as_str())?;
-        panels.push(waves.clone());
+        let wave = WavePanel::new(id.as_str(), color.as_str(), color2.as_str())?;
+        panels.push(wave.clone());
 
         Ok(App {
             points: vec![],
