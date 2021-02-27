@@ -20,7 +20,7 @@ pub struct WavePanel {
     graph_type: Rc<Cell<GraphType>>,
 }
 
-impl Panel for WavePanel {
+impl Panel<WaveGraphics> for WavePanel {
     fn g(&self) -> Rc<RefCell<WaveGraphics>> {
         self.g.clone()
     }

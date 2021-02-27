@@ -18,6 +18,8 @@ pub trait Graphics {
         }
     }
 
+    fn reset(&mut self, _width: f64, _height: f64) {}
+
     fn relative_pos_full(&self, counter: u32) -> f64 {
         counter as f64 / FULL_CYCLE
     }

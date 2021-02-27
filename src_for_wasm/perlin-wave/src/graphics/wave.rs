@@ -30,6 +30,10 @@ impl Graphics for WaveGraphics {
     fn size(&self) -> (f64, f64) {
         (self.width, self.height)
     }
+    fn reset(&mut self, width: f64, height: f64) {
+        self.width = width;
+        self.height = height;
+    }
 }
 
 impl WaveGraphics {
@@ -64,11 +68,6 @@ impl WaveGraphics {
 
     fn amplify_value(&mut self) -> f64 {
         self.display_height * 0.2
-    }
-
-    pub fn reset(&mut self, width: f64, height: f64) {
-        self.width = width;
-        self.height = height;
     }
 
     pub fn render_radio(self: &mut WaveGraphics, points: &Vec<Point>, counter: u32) {
