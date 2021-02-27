@@ -1,3 +1,4 @@
+use core::cell::RefCell;
 use std::cell::Cell;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
@@ -8,17 +9,24 @@ use crate::constants::CANVAS_RATIO;
 use crate::graphics::waves::WavesGraphics;
 use crate::graphics::Graphics;
 use crate::panels::waves::GraphType::{Bars, Radio, Solar};
+use crate::panels::Panel;
 use crate::types::Point;
 use crate::utils::get_wrapper_element;
 
 #[derive(Clone, Debug)]
-pub struct Waves {
+pub struct WavesPanel {
     id: String,
-    g: WavesGraphics,
+    g: Rc<RefCell<WavesGraphics>>,
     graph_type: Rc<Cell<GraphType>>,
 }
 
-impl Waves {
+impl Panel for WavesPanel {
+    fn g(&self) -> Rc<RefCell<WavesGraphics>> {
+        self.g.clone()
+    }
+}
+
+impl WavesPanel {
     pub fn new(id: &str, color: &str, color2: &str) -> Result<Self, String> {
         let el: HtmlElement = get_wrapper_element(id)?;
         let width: f64 = el.offset_width() as f64; // i32
@@ -39,23 +47,20 @@ impl Waves {
 
         Ok(Self {
             id: id.into(),
-            g,
+            g: Rc::new(RefCell::new(g)),
             graph_type,
         })
     }
 
-    pub fn reset(&mut self) {
-        self.g.reset(self.g.width, self.g.height);
-    }
-
     pub fn draw(&mut self, points: &Vec<Point>, points_prev: &Vec<Point>, counter: u32) {
-        self.g.clear();
+        let mut g = self.g.borrow_mut();
+        g.clear();
         match self.graph_type.get() {
-            GraphType::Radio => self.g.render_radio(&points, counter),
-            GraphType::Bars => self.g.render_bars(&points, &points_prev, counter),
-            GraphType::Solar => self.g.render_solar(&points, &points_prev, counter),
+            GraphType::Radio => g.render_radio(&points, counter),
+            GraphType::Bars => g.render_bars(&points, &points_prev, counter),
+            GraphType::Solar => g.render_solar(&points, &points_prev, counter),
         }
-        self.g.render_control(&points);
+        g.render_control(&points);
     }
 }
 
