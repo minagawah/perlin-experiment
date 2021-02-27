@@ -1,4 +1,4 @@
-pub mod waves;
+pub mod wave;
 
 use core::cell::RefCell;
 use std::rc::Rc;
