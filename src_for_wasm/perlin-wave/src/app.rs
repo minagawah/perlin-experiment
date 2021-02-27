@@ -18,11 +18,21 @@ impl App {
     pub fn new(config: &Config) -> Result<Self, String> {
         let color: String = config.color.clone();
         let color2: String = config.color2.clone();
-        let id: String = config.panels[0].id.clone();
 
         let mut panels = vec![];
-        let wave = WavePanel::new(id.as_str(), color.as_str(), color2.as_str())?;
-        panels.push(wave.clone());
+        for panel in &config.panels {
+            let id = panel.id.clone();
+            match id.as_str() {
+                "wave" => {
+                    panels.push(WavePanel::new(
+                        id.as_str(),
+                        color.as_str(),
+                        color2.as_str(),
+                    )?);
+                }
+                _ => {}
+            }
+        }
 
         Ok(App {
             points: vec![],
