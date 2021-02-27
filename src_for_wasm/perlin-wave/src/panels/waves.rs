@@ -5,6 +5,7 @@ use wasm_bindgen::JsCast;
 use web_sys::HtmlElement;
 
 use crate::constants::CANVAS_RATIO;
+use crate::graphics::waves::WavesGraphics;
 use crate::graphics::Graphics;
 use crate::panels::waves::GraphType::{Bars, Radio, Solar};
 use crate::types::Point;
@@ -13,7 +14,7 @@ use crate::utils::get_wrapper_element;
 #[derive(Clone, Debug)]
 pub struct Waves {
     id: String,
-    g: Graphics,
+    g: WavesGraphics,
     graph_type: Rc<Cell<GraphType>>,
 }
 
@@ -25,7 +26,7 @@ impl Waves {
 
         web_sys::console::log_1(&(format!(">> {} x {}", width, height).into()));
 
-        let g: Graphics = Graphics::new(id, width, height, color, color2)?;
+        let g: WavesGraphics = WavesGraphics::new(id, width, height, color, color2)?;
         let graph_type: Rc<Cell<GraphType>> = Rc::new(Cell::new(GraphType::Radio));
 
         let graph_type_clone = graph_type.clone();
