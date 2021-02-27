@@ -42,6 +42,31 @@ pub fn create_canvas(name: &str) -> Result<web_sys::HtmlCanvasElement, String> {
     Ok(canvas)
 }
 
+pub fn get_canvas_ctx(
+    id: &str,
+    width: f64,
+    height: f64,
+) -> Result<
+    (
+        web_sys::HtmlCanvasElement,
+        web_sys::CanvasRenderingContext2d,
+    ),
+    String,
+> {
+    let canvas = create_canvas(id)?;
+    canvas.set_width(width as u32);
+    canvas.set_height(height as u32);
+
+    let ctx = canvas
+        .get_context("2d")
+        .unwrap()
+        .unwrap()
+        .dyn_into::<web_sys::CanvasRenderingContext2d>()
+        .unwrap();
+
+    Ok((canvas, ctx))
+}
+
 pub fn ease_in_out_quad(v: f64) -> f64 {
     if v < 0.5 {
         v * v * 2.0
