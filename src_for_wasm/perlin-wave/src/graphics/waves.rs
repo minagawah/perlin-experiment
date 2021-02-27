@@ -1,10 +1,8 @@
-#![allow(unused_imports)]
-
 use core::cell::RefCell;
 use lerp::Lerp;
 use std::f64::consts::PI;
 use std::rc::Rc;
-use wasm_bindgen::JsCast;
+// use wasm_bindgen::JsCast;
 
 use crate::constants::{CONTROL_PANEL_RATIO, NORMAL_WIDTH, SEGMENTS};
 use crate::types::{Point, Solar};
