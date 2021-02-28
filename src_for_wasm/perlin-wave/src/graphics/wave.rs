@@ -4,7 +4,7 @@ use std::f64::consts::PI;
 use std::rc::Rc;
 
 use crate::constants::{CONTROL_PANEL_RATIO, NORMAL_WIDTH, SEGMENTS};
-use crate::types::{Point, Solar};
+use crate::types::Point;
 use crate::utils::{ease_in_out_quad, get_canvas_ctx};
 
 use crate::graphics::Graphics;
@@ -17,7 +17,7 @@ pub struct WaveGraphics {
     pub height: f64,
     display_height: f64,
     control_height: f64,
-    solar: Solar,
+    solar_info: SolarInfo,
     color: String,
     color2: String,
     font_style: String,
@@ -50,7 +50,7 @@ impl WaveGraphics {
         let display_height: f64 = height - control_height;
         let font_size: u32 = (control_height * 1.1) as u32;
         let font_style: String = format!("{}px serif", font_size);
-        let solar = Solar::new(height, (SEGMENTS as f64 * 0.4).round());
+        let solar_info = SolarInfo::new(height, (SEGMENTS as f64 * 0.4).round());
 
         Ok(WaveGraphics {
             canvas,
@@ -59,7 +59,7 @@ impl WaveGraphics {
             height,
             display_height,
             control_height,
-            solar,
+            solar_info,
             color: color.into(),
             color2: color2.into(),
             font_style,
@@ -118,7 +118,7 @@ impl WaveGraphics {
     }
 
     pub fn render_solar(&mut self, points: &Vec<Point>, points_prev: &Vec<Point>, counter: u32) {
-        let sol = self.solar.clone();
+        let sol = self.solar_info.clone();
         let offset_x = self.width / 2.0;
         let offset_y = self.height / 2.0;
         let rel_pos: f64 = self.relative_pos_full(counter);
@@ -154,5 +154,38 @@ impl WaveGraphics {
         ctx.fill_text(text.as_str(), 5_f64, (self.display_height + 5.0).round())
             .unwrap_or(());
         ctx.restore();
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct SolarInfo {
+    pub segments: f64,
+    pub margin: f64,
+    pub radius: f64,
+    pub radius_inner: f64,
+    pub max_length: f64,
+    pub size: f64,
+    pub angle_step: f64,
+}
+
+impl SolarInfo {
+    pub fn new(canvas_height: f64, segments: f64) -> SolarInfo {
+        let angle_step = 360.0 / segments;
+        let diameter = canvas_height * 0.9;
+        let margin = (canvas_height - diameter) / 2.0;
+        let radius = diameter / 2.0;
+        let radius_inner = radius * 0.65;
+        let max_length = radius - radius_inner;
+        let size = diameter * PI / segments * 0.2;
+
+        SolarInfo {
+            segments,
+            margin,
+            radius,
+            radius_inner,
+            max_length,
+            size,
+            angle_step,
+        }
     }
 }
