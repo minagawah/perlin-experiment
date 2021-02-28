@@ -23,7 +23,6 @@ pub struct PanelConfig {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    pub id: String,
     pub color: String,
     pub color2: String,
     pub panels: Vec<PanelConfig>,
