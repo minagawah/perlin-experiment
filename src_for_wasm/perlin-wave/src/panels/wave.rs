@@ -27,7 +27,7 @@ impl Panel<WaveGraphics> for WavePanel {
 }
 
 impl WavePanel {
-    pub fn new(id: &str, color: &str, color2: &str) -> Result<Self, String> {
+    pub fn new(id: &str, color: &str, color2: &str) -> Result<WavePanel, String> {
         let el: HtmlElement = get_wrapper_element(id)?;
         let width: f64 = el.offset_width() as f64; // i32
         let height: f64 = width as f64 / CANVAS_RATIO;
@@ -45,7 +45,7 @@ impl WavePanel {
         el.set_onclick(Some(f.as_ref().unchecked_ref()));
         f.forget();
 
-        Ok(Self {
+        Ok(WavePanel {
             id: id.into(),
             g: Rc::new(RefCell::new(g)),
             graph_type,
