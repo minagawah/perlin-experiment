@@ -92,11 +92,11 @@ it would be worth showing the directory structure:
         ├── src
         │   ├── app.rs
         │   ├── constants.rs
-        │   ├── graphics.rs
+        │   ├── graphics
         │   │   ├── mod.rs
         │   │   └── wave.rs
         │   ├── lib.rs   # This is the module root
-        │   ├── panels.rs
+        │   ├── panels
         │   │   ├── mod.rs
         │   │   └── wave.rs
         │   ├── perlin.rs
