@@ -93,8 +93,12 @@ it would be worth showing the directory structure:
         │   ├── app.rs
         │   ├── constants.rs
         │   ├── graphics.rs
+        │   │   ├── mod.rs
+        │   │   └── wave.rs
         │   ├── lib.rs   # This is the module root
-        │   ├── perlin.rs
+        │   ├── panels.rs
+        │   │   ├── mod.rs
+        │   │   └── wave.rs
         │   ├── perlin.rs
         │   ├── types.rs
         │   └── utils.rs
@@ -249,9 +253,11 @@ const WASM_PATH =
 init(WASM_PATH)
   .then(() => {
     PerlinWave.run({
-      id: 'wave',
       color: '#757703',
       color2: '#d3d626',
+      panels: [
+        { id: 'wave' },
+      ],
     });
   })
   .catch(err => {
