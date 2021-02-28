@@ -1,21 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::f64::consts::PI;
 
-#[derive(Debug)]
-pub struct Store {
-    pub mode: usize,
-}
-
-impl Store {
-    pub fn new() -> Self {
-        Self { mode: 0 }
-    }
-
-    pub fn toggle(&mut self) {
-        self.mode = (self.mode + 1) % 3;
-    }
-}
-
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PanelConfig {
     pub id: String,
