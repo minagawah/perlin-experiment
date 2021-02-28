@@ -158,18 +158,18 @@ impl WaveGraphics {
 }
 
 #[derive(Clone, Debug)]
-pub struct SolarInfo {
-    pub segments: f64,
-    pub margin: f64,
-    pub radius: f64,
-    pub radius_inner: f64,
-    pub max_length: f64,
-    pub size: f64,
-    pub angle_step: f64,
+struct SolarInfo {
+    segments: f64,
+    margin: f64,
+    radius: f64,
+    radius_inner: f64,
+    max_length: f64,
+    size: f64,
+    angle_step: f64,
 }
 
 impl SolarInfo {
-    pub fn new(canvas_height: f64, segments: f64) -> SolarInfo {
+    fn new(canvas_height: f64, segments: f64) -> SolarInfo {
         let angle_step = 360.0 / segments;
         let diameter = canvas_height * 0.9;
         let margin = (canvas_height - diameter) / 2.0;
