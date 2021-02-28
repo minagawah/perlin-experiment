@@ -15,7 +15,7 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(config: &Config) -> Result<Self, String> {
+    pub fn new(config: &Config) -> Result<App, String> {
         let color: String = config.color.clone();
         let color2: String = config.color2.clone();
 
@@ -41,7 +41,7 @@ impl App {
         })
     }
 
-    pub fn reset(self: &mut App) {
+    pub fn reset(&mut self) {
         self.points_prev = if self.points.len() > 0 {
             self.points.clone()
         } else {
@@ -65,7 +65,7 @@ impl App {
         }
     }
 
-    pub fn draw(self: &mut App, counter: u32) {
+    pub fn draw(&mut self, counter: u32) {
         for mut panel in self.panels.clone() {
             panel.draw(&self.points, &self.points_prev, counter);
         }

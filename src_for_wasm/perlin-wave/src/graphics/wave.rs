@@ -27,9 +27,11 @@ impl Graphics for WaveGraphics {
     fn ctx(&mut self) -> Rc<RefCell<web_sys::CanvasRenderingContext2d>> {
         self.ctx.clone()
     }
+
     fn size(&self) -> (f64, f64) {
         (self.width, self.height)
     }
+
     fn reset(&mut self, width: f64, height: f64) {
         self.width = width;
         self.height = height;
@@ -70,7 +72,7 @@ impl WaveGraphics {
         self.display_height * 0.2
     }
 
-    pub fn render_radio(self: &mut WaveGraphics, points: &Vec<Point>, counter: u32) {
+    pub fn render_radio(&mut self, points: &Vec<Point>, counter: u32) {
         let half_h: f64 = self.display_height / 2.0;
         let amplify = self.amplify_value();
         let rel_pos: f64 = ease_in_out_quad(self.relative_pos_half(counter));
