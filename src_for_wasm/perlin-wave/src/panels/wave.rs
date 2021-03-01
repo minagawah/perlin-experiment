@@ -13,15 +13,14 @@ use crate::panels::Panel;
 use crate::types::Point;
 use crate::utils::get_wrapper_element;
 
-#[derive(Clone, Debug)]
 pub struct WavePanel {
     id: String,
-    g: Rc<RefCell<WaveGraphics>>,
+    g: Rc<RefCell<dyn Graphics>>,
     graph_type: Rc<Cell<GraphType>>,
 }
 
-impl Panel<WaveGraphics> for WavePanel {
-    fn g(&self) -> Rc<RefCell<WaveGraphics>> {
+impl Panel for WavePanel {
+    fn g(&self) -> Rc<RefCell<dyn Graphics>> {
         self.g.clone()
     }
 }

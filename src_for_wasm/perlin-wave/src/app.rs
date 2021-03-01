@@ -7,11 +7,10 @@ use crate::panels::Panel;
 use crate::perlin::noise_2d;
 use crate::types::{Config, Point};
 
-#[derive(Clone, Debug)]
 pub struct App {
     points: Vec<Point>,
     points_prev: Vec<Point>,
-    panels: Vec<WavePanel>,
+    panels: Vec<Box<dyn Panel>>,
 }
 
 impl App {
@@ -24,11 +23,11 @@ impl App {
             let id = panel.id.clone();
             match id.as_str() {
                 "wave" => {
-                    panels.push(WavePanel::new(
+                    panels.push(Box::new(WavePanel::new(
                         id.as_str(),
                         color.as_str(),
                         color2.as_str(),
-                    )?);
+                    )?));
                 }
                 _ => {}
             }
@@ -60,13 +59,13 @@ impl App {
             self.points[i] = Point { x: x, y: y };
         }
 
-        for mut panel in self.panels.clone() {
+        for mut panel in self.panels.iter() {
             panel.reset();
         }
     }
 
     pub fn draw(&mut self, counter: u32) {
-        for mut panel in self.panels.clone() {
+        for mut panel in self.panels.iter() {
             panel.draw(&self.points, &self.points_prev, counter);
         }
     }
