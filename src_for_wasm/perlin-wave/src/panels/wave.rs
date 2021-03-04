@@ -13,16 +13,32 @@ use crate::panels::Panel;
 use crate::types::Point;
 use crate::utils::get_wrapper_element;
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct WavePanel {
     id: String,
-    g: Rc<RefCell<WaveGraphics>>,
+    g: Rc<RefCell<dyn Graphics>>,
     graph_type: Rc<Cell<GraphType>>,
 }
 
-impl Panel<WaveGraphics> for WavePanel {
-    fn g(&self) -> Rc<RefCell<WaveGraphics>> {
+impl Panel for WavePanel {
+    fn g(&self) -> Rc<RefCell<dyn Graphics>> {
         self.g.clone()
+    }
+
+    fn draw(&mut self, points: &Vec<Point>, points_prev: &Vec<Point>, counter: u32) {
+        let mut g = self.g.borrow_mut();
+        match g.as_any_mut().downcast_mut::<WaveGraphics>() {
+            Some(g) => {
+                g.clear();
+                match self.graph_type.get() {
+                    GraphType::Radio => g.render_radio(&points, counter),
+                    GraphType::Bars => g.render_bars(&points, &points_prev, counter),
+                    GraphType::Solar => g.render_solar(&points, &points_prev, counter),
+                }
+                g.render_control(&points);
+            }
+            None => {}
+        }
     }
 }
 
@@ -50,17 +66,6 @@ impl WavePanel {
             g: Rc::new(RefCell::new(g)),
             graph_type,
         })
-    }
-
-    pub fn draw(&mut self, points: &Vec<Point>, points_prev: &Vec<Point>, counter: u32) {
-        let mut g = self.g.borrow_mut();
-        g.clear();
-        match self.graph_type.get() {
-            GraphType::Radio => g.render_radio(&points, counter),
-            GraphType::Bars => g.render_bars(&points, &points_prev, counter),
-            GraphType::Solar => g.render_solar(&points, &points_prev, counter),
-        }
-        g.render_control(&points);
     }
 }
 
