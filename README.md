@@ -29,6 +29,8 @@ Click the canvas to toggle between 3 different visualization modes.
 
 - Generating an organic looking wave using Perlin Noise
 - Click the canvas to toggle between 3 different visualization modes (Wave/Equalizer/Solar).
+- Show the current amplitude value in a control panel underneath
+- So, the app is handling 2 DOM elements: `#wave` and `#control`
 
 I have some example apps from the past:
 
@@ -94,10 +96,12 @@ it would be worth showing the directory structure:
         │   ├── constants.rs
         │   ├── graphics
         │   │   ├── mod.rs
+        │   │   ├── control.rs
         │   │   └── wave.rs
         │   ├── lib.rs   # This is the module root
         │   ├── panels
         │   │   ├── mod.rs
+        │   │   ├── control.rs
         │   │   └── wave.rs
         │   ├── perlin.rs
         │   ├── types.rs
@@ -240,7 +244,16 @@ perlin-wave.js
 
 #### [Step 4] Subdirectory Issue
 
-From JS, we want this:
+For HTML & JS, we want these:
+
+```html
+<div id="container">
+  <div id="wrapper">
+    <div id="wave"></div>
+    <div id="control"></div>
+  </div>
+</div>
+```
 
 ```js
 import init, * as PerlinWave from 'perlin-wave';
@@ -257,6 +270,7 @@ init(WASM_PATH)
       color2: '#d3d626',
       panels: [
         { id: 'wave' },
+        { id: 'control' },
       ],
     });
   })

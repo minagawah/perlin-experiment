@@ -14,6 +14,7 @@ init(WASM_PATH)
       color2: '#d3d626', // mustard
       panels: [
         { id: 'wave' },
+        { id: 'control' },
       ],
     });
   })

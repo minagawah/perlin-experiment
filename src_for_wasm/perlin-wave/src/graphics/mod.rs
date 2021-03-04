@@ -1,3 +1,4 @@
+pub mod control;
 pub mod wave;
 
 use core::cell::RefCell;
