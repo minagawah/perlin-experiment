@@ -1,5 +1,6 @@
 use core::cell::RefCell;
 use lerp::Lerp;
+use std::any::Any;
 use std::f64::consts::PI;
 use std::rc::Rc;
 
@@ -9,7 +10,6 @@ use crate::utils::{ease_in_out_quad, get_canvas_ctx};
 
 use crate::graphics::Graphics;
 
-#[derive(Clone, Debug)]
 pub struct WaveGraphics {
     pub canvas: web_sys::HtmlCanvasElement,
     ctx: Rc<RefCell<web_sys::CanvasRenderingContext2d>>,
@@ -24,6 +24,14 @@ pub struct WaveGraphics {
 }
 
 impl Graphics for WaveGraphics {
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self
+    }
+
     fn ctx(&mut self) -> Rc<RefCell<web_sys::CanvasRenderingContext2d>> {
         self.ctx.clone()
     }
@@ -159,7 +167,7 @@ impl WaveGraphics {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 struct SolarInfo {
     segments: f64,
     margin: f64,

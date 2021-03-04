@@ -1,12 +1,17 @@
 pub mod wave;
 
 use core::cell::RefCell;
+use std::any::Any;
 use std::rc::Rc;
 
 use crate::constants::{FILL_COLOR, FULL_CYCLE};
 
-pub trait Graphics {
+pub trait Graphics: Any {
+    fn as_any(&self) -> &dyn Any;
+    fn as_any_mut(&mut self) -> &mut dyn Any;
+
     fn ctx(&mut self) -> Rc<RefCell<web_sys::CanvasRenderingContext2d>>;
+
     fn size(&self) -> (f64, f64);
 
     fn clear(&mut self) {
