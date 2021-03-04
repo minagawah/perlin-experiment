@@ -5,7 +5,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::HtmlElement;
 
-use crate::constants::CANVAS_RATIO;
+use crate::constants::WAVE_CANVAS_RATIO;
 use crate::graphics::wave::WaveGraphics;
 use crate::graphics::Graphics;
 use crate::panels::wave::GraphType::{Bars, Radio, Solar};
@@ -35,7 +35,6 @@ impl Panel for WavePanel {
                     GraphType::Bars => g.render_bars(&points, &points_prev, counter),
                     GraphType::Solar => g.render_solar(&points, &points_prev, counter),
                 }
-                g.render_control(&points);
             }
             None => {}
         }
@@ -46,7 +45,7 @@ impl WavePanel {
     pub fn new(id: &str, color: &str, color2: &str) -> Result<WavePanel, String> {
         let el: HtmlElement = get_wrapper_element(id)?;
         let width: f64 = el.offset_width() as f64; // i32
-        let height: f64 = width as f64 / CANVAS_RATIO;
+        let height: f64 = width as f64 / WAVE_CANVAS_RATIO;
 
         web_sys::console::log_1(&(format!(">> {} x {}", width, height).into()));
 

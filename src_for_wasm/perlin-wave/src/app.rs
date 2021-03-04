@@ -2,6 +2,7 @@ use lerp::Lerp;
 use rand::{self, Rng};
 
 use crate::constants::{NORMAL_WIDTH, SEGMENTS};
+use crate::panels::control::ControlPanel;
 use crate::panels::wave::WavePanel;
 use crate::panels::Panel;
 use crate::perlin::noise_2d;
@@ -24,6 +25,14 @@ impl App {
             match id.as_str() {
                 "wave" => {
                     let pane: Box<dyn Panel> = Box::new(WavePanel::new(
+                        id.as_str(),
+                        color.as_str(),
+                        color2.as_str(),
+                    )?);
+                    panels.push(pane);
+                }
+                "control" => {
+                    let pane: Box<dyn Panel> = Box::new(ControlPanel::new(
                         id.as_str(),
                         color.as_str(),
                         color2.as_str(),

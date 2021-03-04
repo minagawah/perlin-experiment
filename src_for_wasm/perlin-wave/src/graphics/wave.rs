@@ -4,7 +4,7 @@ use std::any::Any;
 use std::f64::consts::PI;
 use std::rc::Rc;
 
-use crate::constants::{CONTROL_PANEL_RATIO, NORMAL_WIDTH, SEGMENTS};
+use crate::constants::{NORMAL_WIDTH, SEGMENTS};
 use crate::types::Point;
 use crate::utils::{ease_in_out_quad, get_canvas_ctx};
 
@@ -15,12 +15,9 @@ pub struct WaveGraphics {
     ctx: Rc<RefCell<web_sys::CanvasRenderingContext2d>>,
     pub width: f64,
     pub height: f64,
-    display_height: f64,
-    control_height: f64,
     solar_info: SolarInfo,
     color: String,
     color2: String,
-    font_style: String,
 }
 
 impl Graphics for WaveGraphics {
@@ -56,10 +53,6 @@ impl WaveGraphics {
     ) -> Result<WaveGraphics, String> {
         let (canvas, ctx) = get_canvas_ctx(id, width, height)?;
 
-        let control_height: f64 = height * CONTROL_PANEL_RATIO;
-        let display_height: f64 = height - control_height;
-        let font_size: u32 = (control_height * 1.1) as u32;
-        let font_style: String = format!("{}px serif", font_size);
         let solar_info = SolarInfo::new(height, (SEGMENTS as f64 * 0.4).round());
 
         Ok(WaveGraphics {
@@ -67,21 +60,18 @@ impl WaveGraphics {
             ctx: Rc::new(RefCell::new(ctx)),
             width,
             height,
-            display_height,
-            control_height,
             solar_info,
             color: color.into(),
             color2: color2.into(),
-            font_style,
         })
     }
 
     fn amplify_value(&mut self) -> f64 {
-        self.display_height * 0.2
+        self.height * 0.2
     }
 
     pub fn render_radio(&mut self, points: &Vec<Point>, counter: u32) {
-        let half_h: f64 = self.display_height / 2.0;
+        let half_h: f64 = self.height / 2.0;
         let amplify = self.amplify_value();
         let rel_pos: f64 = ease_in_out_quad(self.relative_pos_half(counter));
         let ctx = self.ctx.borrow();
@@ -105,7 +95,7 @@ impl WaveGraphics {
 
     pub fn render_bars(&mut self, points: &Vec<Point>, points_prev: &Vec<Point>, counter: u32) {
         let unit_w: f64 = (self.width / SEGMENTS as f64) - 2.0;
-        let half_h: f64 = self.display_height / 2.0;
+        let half_h: f64 = self.height / 2.0;
         let amplify = self.amplify_value();
         let rel_pos: f64 = self.relative_pos_full(counter);
         let ctx = self.ctx.borrow();
@@ -152,17 +142,6 @@ impl WaveGraphics {
             ctx.fill_rect(x, y, width, height);
             ctx.restore();
         }
-        ctx.restore();
-    }
-
-    pub fn render_control(&mut self, points: &Vec<Point>) {
-        let text: String = format!("{:.5}", points[0].y.abs() * 10.0);
-        let ctx = self.ctx.borrow();
-        ctx.save();
-        ctx.set_fill_style(&self.color2.as_str().into());
-        ctx.set_font(self.font_style.as_str());
-        ctx.fill_text(text.as_str(), 5_f64, (self.display_height + 5.0).round())
-            .unwrap_or(());
         ctx.restore();
     }
 }
