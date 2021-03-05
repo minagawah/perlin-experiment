@@ -6,12 +6,11 @@ use std::rc::Rc;
 
 use crate::constants::{NORMAL_WIDTH, SEGMENTS};
 use crate::types::Point;
-use crate::utils::{ease_in_out_quad, get_canvas_ctx};
+use crate::utils::{ease_in_out_quad, get_canvas, get_ctx};
 
 use crate::graphics::Graphics;
 
 pub struct WaveGraphics {
-    pub canvas: web_sys::HtmlCanvasElement,
     ctx: Rc<RefCell<web_sys::CanvasRenderingContext2d>>,
     pub width: f64,
     pub height: f64,
@@ -51,12 +50,11 @@ impl WaveGraphics {
         color: &str,
         color2: &str,
     ) -> Result<WaveGraphics, String> {
-        let (canvas, ctx) = get_canvas_ctx(id, width, height)?;
-
+        let canvas = get_canvas(id, width, height)?;
+        let ctx = get_ctx(&canvas)?;
         let solar_info = SolarInfo::new(height, (SEGMENTS as f64 * 0.4).round());
 
         Ok(WaveGraphics {
-            canvas,
             ctx: Rc::new(RefCell::new(ctx)),
             width,
             height,
