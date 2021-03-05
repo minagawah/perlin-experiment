@@ -28,43 +28,37 @@ pub fn get_wrapper_element(name: &str) -> Result<web_sys::HtmlElement, String> {
         .map_err(|e| e.to_string())?)
 }
 
-pub fn create_canvas(name: &str) -> Result<web_sys::HtmlCanvasElement, String> {
+pub fn create_canvas() -> Result<web_sys::HtmlCanvasElement, String> {
     let canvas = document()?
         .create_element("canvas")
         .map_err(|_| "Failed to create canvas".to_string())?
         .dyn_into::<web_sys::HtmlCanvasElement>()
         .map_err(|e| e.to_string())?;
+    Ok(canvas)
+}
 
-    get_wrapper_element(name)?
+pub fn get_canvas(id: &str, width: f64, height: f64) -> Result<web_sys::HtmlCanvasElement, String> {
+    let canvas = create_canvas()?;
+    canvas.set_width(width as u32);
+    canvas.set_height(height as u32);
+
+    get_wrapper_element(id)?
         .append_child(&canvas)
         .map_err(|_| "Failed append canvas".to_string())?;
 
     Ok(canvas)
 }
 
-pub fn get_canvas_ctx(
-    id: &str,
-    width: f64,
-    height: f64,
-) -> Result<
-    (
-        web_sys::HtmlCanvasElement,
-        web_sys::CanvasRenderingContext2d,
-    ),
-    String,
-> {
-    let canvas = create_canvas(id)?;
-    canvas.set_width(width as u32);
-    canvas.set_height(height as u32);
-
+pub fn get_ctx(
+    canvas: &web_sys::HtmlCanvasElement,
+) -> Result<web_sys::CanvasRenderingContext2d, String> {
     let ctx = canvas
         .get_context("2d")
         .unwrap()
         .unwrap()
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap();
-
-    Ok((canvas, ctx))
+    Ok(ctx)
 }
 
 pub fn ease_in_out_quad(v: f64) -> f64 {

@@ -3,12 +3,11 @@ use std::any::Any;
 use std::rc::Rc;
 
 use crate::types::Point;
-use crate::utils::get_canvas_ctx;
+use crate::utils::{get_canvas, get_ctx};
 
 use crate::graphics::Graphics;
 
 pub struct ControlGraphics {
-    pub canvas: web_sys::HtmlCanvasElement,
     ctx: Rc<RefCell<web_sys::CanvasRenderingContext2d>>,
     pub width: f64,
     pub height: f64,
@@ -48,13 +47,13 @@ impl ControlGraphics {
         _color: &str,
         color2: &str,
     ) -> Result<ControlGraphics, String> {
-        let (canvas, ctx) = get_canvas_ctx(id, width, height)?;
+        let canvas = get_canvas(id, width, height)?;
+        let ctx = get_ctx(&canvas)?;
 
         let font_size: u32 = (height * 0.8) as u32;
         let font_style: String = format!("{}px serif", font_size);
 
         Ok(ControlGraphics {
-            canvas,
             ctx: Rc::new(RefCell::new(ctx)),
             width,
             height,
