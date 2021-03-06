@@ -33,12 +33,18 @@ impl Panel for ControlPanel {
 }
 
 impl ControlPanel {
-    pub fn new(id: &str, width: f64, height: f64, color: &str) -> Result<ControlPanel, String> {
+    pub fn new(
+        id: &str,
+        width: f64,
+        height: f64,
+        bgcolor: &str,
+        color: &str,
+    ) -> Result<ControlPanel, String> {
         web_sys::console::log_1(
             &(format!("(control) {} x {}", width as u32, height as u32).into()),
         );
 
-        let g: ControlGraphics = ControlGraphics::new(id, width, height, color)?;
+        let g: ControlGraphics = ControlGraphics::new(id, width, height, bgcolor, color)?;
 
         Ok(ControlPanel {
             id: id.into(),

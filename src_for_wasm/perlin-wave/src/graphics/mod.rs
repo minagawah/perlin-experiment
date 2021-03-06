@@ -4,8 +4,9 @@ pub mod wave;
 use core::cell::RefCell;
 use std::any::Any;
 use std::rc::Rc;
+use wasm_bindgen::prelude::*;
 
-use crate::constants::{FILL_COLOR, FULL_CYCLE};
+use crate::constants::FULL_CYCLE;
 use crate::exit;
 
 pub trait Graphics: Any {
@@ -16,11 +17,13 @@ pub trait Graphics: Any {
 
     fn size(&self) -> (f64, f64);
 
+    fn bgcolor(&self) -> &str;
+
     fn clear(&mut self) {
         let (width, height) = self.size();
         if let Ok(ctx) = self.ctx().try_borrow() {
             ctx.clear_rect(0.0, 0.0, width, height);
-            ctx.set_fill_style(&FILL_COLOR.into());
+            ctx.set_fill_style(&JsValue::from(self.bgcolor()));
             ctx.fill_rect(0.0, 0.0, width, height);
         } else {
             exit("Failed to borrow: self.ctx() (clear)");

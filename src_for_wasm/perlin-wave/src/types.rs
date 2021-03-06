@@ -5,12 +5,12 @@ pub struct PanelConfig {
     pub id: String,
     pub width: f64,
     pub height: f64,
+    pub color: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    pub color: String,
-    pub color2: String,
+    pub bgcolor: String,
     pub panels: Vec<PanelConfig>,
 }
 

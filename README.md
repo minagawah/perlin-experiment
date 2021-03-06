@@ -265,12 +265,18 @@ const WASM_PATH =
     ? 'wasm/perlin-wave/perlin-wave_bg.wasm'
     : void 0;
 
-const CANVAS_IDS = ['control', 'wave'];
-
-const CANVAS_RATIO = {
-  control: 15.0 / 1.0,
-  wave: 3.0 / 1.0,
-};
+const CANVAS_PANELS = [
+  {
+    id: 'control',
+    ratio: 15.0 / 1.0,
+    color: '#757703',
+  },
+  {
+    id: 'wave',
+    ratio: 3.0 / 1.0,
+    color: '#d3d626',
+  },
+];
 
 document.addEventListener('DOMContentLoaded', onload);
 
@@ -282,9 +288,8 @@ function onload() {
   init(WASM_PATH)
     .then(() => {
       PerlinWave.run({
-        color: '#757703',
-        color2: '#d3d626',
-        panels: CANVAS_IDS.reduce(panelsReducer, []),
+        bgcolor: '#222',
+        panels: CANVAS_PANELS.reduce(panelsReducer, []),
       });
     })
     .catch(err => {
@@ -292,13 +297,18 @@ function onload() {
     });
 }
 
-function panelsReducer(acc = [], id) {
+function panelsReducer(acc = [], { id, ratio, color }) {
   const key = `#${id}`;
   const el = document.querySelector(key);
   if (el) {
     const width = el.offsetWidth || 0;
-    const height = width / CANVAS_RATIO[id];
-    acc.push({ id, width, height });
+    const height = width / ratio;
+    acc.push({
+      id,
+      color,
+      width,
+      height,
+    });
     el.style.height = `${height}px`;
   }
   return acc;
