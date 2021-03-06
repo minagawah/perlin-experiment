@@ -6,7 +6,7 @@ pub mod perlin;
 pub mod types;
 pub mod utils;
 
-use log::error;
+// use log::error;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
