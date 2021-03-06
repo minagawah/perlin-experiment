@@ -17,5 +17,5 @@ pub trait Panel {
         };
     }
 
-    fn draw(&mut self, points: &Vec<Point>, points_prev: &Vec<Point>, counter: u32);
+    fn draw(&mut self, points: &[Point], points_prev: &[Point], counter: u32);
 }
