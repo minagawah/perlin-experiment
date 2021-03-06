@@ -43,7 +43,8 @@ code {
   align-items: center;
 }
 
-#wave, #control {
+#wave,
+#control {
   width: 100%;
 }
 

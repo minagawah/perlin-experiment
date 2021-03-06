@@ -1,13 +1,10 @@
 use core::cell::RefCell;
 use std::rc::Rc;
-use web_sys::HtmlElement;
 
-use crate::constants::CONTROL_CANVAS_RATIO;
 use crate::graphics::control::ControlGraphics;
 use crate::graphics::Graphics;
 use crate::panels::Panel;
 use crate::types::Point;
-use crate::utils::get_wrapper_element;
 
 #[derive(Clone)]
 pub struct ControlPanel {
@@ -30,12 +27,8 @@ impl Panel for ControlPanel {
 }
 
 impl ControlPanel {
-    pub fn new(id: &str, color: &str) -> Result<ControlPanel, String> {
-        let el: HtmlElement = get_wrapper_element(id)?;
-        let width: f64 = el.offset_width() as f64; // i32
-        let height: f64 = width as f64 / CONTROL_CANVAS_RATIO;
-
-        web_sys::console::log_1(&(format!(">> {} x {}", width, height).into()));
+    pub fn new(id: &str, width: f64, height: f64, color: &str) -> Result<ControlPanel, String> {
+        web_sys::console::log_1(&(format!(">> {} x {}", width as u32, height as u32).into()));
 
         let g: ControlGraphics = ControlGraphics::new(id, width, height, color)?;
 
