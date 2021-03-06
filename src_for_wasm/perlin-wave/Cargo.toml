@@ -1,6 +1,6 @@
 [package]
 name = "perlin-wave"
-version = "0.1.24"
+version = "0.1.25"
 authors = ["Hiroki Minagawa <minagawa@tokyo800.jp>"]
 edition = "2018"
 publish = false
@@ -13,7 +13,6 @@ console_error_panic_hook = "^0.1"
 console_log = "^0.2"
 js-sys = "0.3.47"
 lerp = "0.4.0"
-log = "^0.4"
 noise = "0.7.0"
 serde = { version = "1.0.123", features = ["derive"] }
 wasm-bindgen = { version = "0.2.70", features = ["serde-serialize"] }
