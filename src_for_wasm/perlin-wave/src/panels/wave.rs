@@ -44,11 +44,17 @@ impl Panel for WavePanel {
 }
 
 impl WavePanel {
-    pub fn new(id: &str, width: f64, height: f64, color: &str) -> Result<WavePanel, String> {
+    pub fn new(
+        id: &str,
+        width: f64,
+        height: f64,
+        bgcolor: &str,
+        color: &str,
+    ) -> Result<WavePanel, String> {
         let el: HtmlElement = get_wrapper_element(id)?;
         web_sys::console::log_1(&(format!("(wave) {} x {}", width as u32, height as u32).into()));
 
-        let g: WaveGraphics = WaveGraphics::new(id, width, height, color)?;
+        let g: WaveGraphics = WaveGraphics::new(id, width, height, bgcolor, color)?;
         let graph_type: Rc<Cell<GraphType>> = Rc::new(Cell::new(GraphType::Radio));
 
         let graph_type_clone = graph_type.clone();

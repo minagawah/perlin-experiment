@@ -16,8 +16,7 @@ pub struct App {
 
 impl App {
     pub fn new(config: &Config) -> Result<App, String> {
-        let color: String = config.color.clone();
-        let color2: String = config.color2.clone();
+        let bgcolor: String = config.bgcolor.clone();
 
         let mut panels = vec![];
 
@@ -25,11 +24,17 @@ impl App {
             let id = panel.id.clone();
             let width = panel.width;
             let height = panel.height;
+            let color = panel.color.clone();
 
             match id.as_str() {
                 "wave" => {
-                    let pane: Box<dyn Panel> =
-                        Box::new(WavePanel::new(id.as_str(), width, height, color.as_str())?);
+                    let pane: Box<dyn Panel> = Box::new(WavePanel::new(
+                        id.as_str(),
+                        width,
+                        height,
+                        bgcolor.as_str(),
+                        color.as_str(),
+                    )?);
                     panels.push(pane);
                 }
                 "control" => {
@@ -37,7 +42,8 @@ impl App {
                         id.as_str(),
                         width,
                         height,
-                        color2.as_str(),
+                        bgcolor.as_str(),
+                        color.as_str(),
                     )?);
                     panels.push(pane);
                 }

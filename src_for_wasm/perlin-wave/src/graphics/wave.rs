@@ -15,6 +15,7 @@ pub struct WaveGraphics {
     pub width: f64,
     pub height: f64,
     solar_info: SolarInfo,
+    bgcolor: String,
     color: String,
 }
 
@@ -35,6 +36,10 @@ impl Graphics for WaveGraphics {
         (self.width, self.height)
     }
 
+    fn bgcolor(&self) -> &str {
+        &self.bgcolor
+    }
+
     fn reset(&mut self, width: f64, height: f64) {
         self.width = width;
         self.height = height;
@@ -42,7 +47,13 @@ impl Graphics for WaveGraphics {
 }
 
 impl WaveGraphics {
-    pub fn new(id: &str, width: f64, height: f64, color: &str) -> Result<WaveGraphics, String> {
+    pub fn new(
+        id: &str,
+        width: f64,
+        height: f64,
+        bgcolor: &str,
+        color: &str,
+    ) -> Result<WaveGraphics, String> {
         let canvas = get_canvas(id, width, height)?;
         let ctx = get_ctx(&canvas)?;
         let solar_info = SolarInfo::new(height, (SEGMENTS as f64 * 0.4).round());
@@ -52,6 +63,7 @@ impl WaveGraphics {
             width,
             height,
             solar_info,
+            bgcolor: bgcolor.into(),
             color: color.into(),
         })
     }

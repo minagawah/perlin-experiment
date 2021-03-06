@@ -11,6 +11,7 @@ pub struct ControlGraphics {
     ctx: Rc<RefCell<web_sys::CanvasRenderingContext2d>>,
     pub width: f64,
     pub height: f64,
+    bgcolor: String,
     color: String,
     font_size: u32,
     font_style: String,
@@ -33,6 +34,10 @@ impl Graphics for ControlGraphics {
         (self.width, self.height)
     }
 
+    fn bgcolor(&self) -> &str {
+        &self.bgcolor
+    }
+
     fn reset(&mut self, width: f64, height: f64) {
         self.width = width;
         self.height = height;
@@ -40,7 +45,13 @@ impl Graphics for ControlGraphics {
 }
 
 impl ControlGraphics {
-    pub fn new(id: &str, width: f64, height: f64, color: &str) -> Result<ControlGraphics, String> {
+    pub fn new(
+        id: &str,
+        width: f64,
+        height: f64,
+        bgcolor: &str,
+        color: &str,
+    ) -> Result<ControlGraphics, String> {
         let canvas = get_canvas(id, width, height)?;
         let ctx = get_ctx(&canvas)?;
 
@@ -51,6 +62,7 @@ impl ControlGraphics {
             ctx: Rc::new(RefCell::new(ctx)),
             width,
             height,
+            bgcolor: bgcolor.into(),
             color: color.into(),
             font_size,
             font_style,
