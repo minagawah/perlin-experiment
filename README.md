@@ -310,14 +310,16 @@ you will notice it is mostly doing things
 that has nothing to do with using wasm files,
 but just calculating for width and height of the wrapper elements.
 
-However, you may notice what the heck is `WASM_PATH` all about?  
+However, you may notice what the heck `WASM_PATH` is all about?  
 Why it is passing `WASM_PATH` as an argument?  
-Well, this is about a _directory_ you serve assets from.  
-If I were serving my assets from site's directory root, I would not need any arguments.  
+Well, this is about the "directory" you serve your assets from.  
+If I were to serve my assets from site's directory root, there is no need for passing the argument.  
 Like this:
 
 ```js
-init();
+init()
+  .then(() => {
+    //
 ```
 
 However, I am serving all the assets from the following subdirectory:  
