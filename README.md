@@ -305,15 +305,21 @@ function panelsReducer(acc = [], id) {
 }
 ```
 
-Notice the above is not very straight foward...  
-Why am I passing `WASM_PATH` as an argument?
+It is a bit long, but if you take a closer look,
+you will notice it is mostly doing things
+that has nothing to do with using wasm files,
+but just calculating for width and height of the wrapper elements.
 
-Well, this is about a _directory_ you serve assets from.  
-If I were serving my assets from site's directory root, I would not need any arguments.  
+However, you may notice what the heck `WASM_PATH` is all about?  
+Why it is passing `WASM_PATH` as an argument?  
+Well, this is about the "directory" you serve your assets from.  
+If I were to serve my assets from site's directory root, there is no need for passing the argument.  
 Like this:
 
 ```js
-init();
+init()
+  .then(() => {
+    //
 ```
 
 However, I am serving all the assets from the following subdirectory:  
