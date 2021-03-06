@@ -24,19 +24,13 @@ impl App {
             let id = panel.id.clone();
             match id.as_str() {
                 "wave" => {
-                    let pane: Box<dyn Panel> = Box::new(WavePanel::new(
-                        id.as_str(),
-                        color.as_str(),
-                        color2.as_str(),
-                    )?);
+                    let pane: Box<dyn Panel> =
+                        Box::new(WavePanel::new(id.as_str(), color.as_str())?);
                     panels.push(pane);
                 }
                 "control" => {
-                    let pane: Box<dyn Panel> = Box::new(ControlPanel::new(
-                        id.as_str(),
-                        color.as_str(),
-                        color2.as_str(),
-                    )?);
+                    let pane: Box<dyn Panel> =
+                        Box::new(ControlPanel::new(id.as_str(), color2.as_str())?);
                     panels.push(pane);
                 }
                 _ => {}
@@ -46,12 +40,12 @@ impl App {
         Ok(App {
             points: vec![],
             points_prev: vec![],
-            panels: panels,
+            panels,
         })
     }
 
     pub fn reset(&mut self) {
-        self.points_prev = if self.points.len() > 0 {
+        self.points_prev = if !self.points.is_empty() {
             self.points.clone()
         } else {
             vec![Point { x: 0.0, y: 0.0 }; SEGMENTS]
@@ -66,7 +60,7 @@ impl App {
             let x: f64 = 0_f64.lerp(NORMAL_WIDTH, ratio);
             let nx: f64 = x + offset;
             let y: f64 = noise_2d(nx, offset);
-            self.points[i] = Point { x: x, y: y };
+            self.points[i] = Point { x, y };
         }
 
         for panel in self.panels.iter_mut() {

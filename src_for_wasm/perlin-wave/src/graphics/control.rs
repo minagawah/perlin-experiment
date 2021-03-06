@@ -40,13 +40,7 @@ impl Graphics for ControlGraphics {
 }
 
 impl ControlGraphics {
-    pub fn new(
-        id: &str,
-        width: f64,
-        height: f64,
-        _color: &str,
-        color2: &str,
-    ) -> Result<ControlGraphics, String> {
+    pub fn new(id: &str, width: f64, height: f64, color: &str) -> Result<ControlGraphics, String> {
         let canvas = get_canvas(id, width, height)?;
         let ctx = get_ctx(&canvas)?;
 
@@ -57,13 +51,13 @@ impl ControlGraphics {
             ctx: Rc::new(RefCell::new(ctx)),
             width,
             height,
-            color: color2.into(),
+            color: color.into(),
             font_size,
             font_style,
         })
     }
 
-    pub fn render_control(&mut self, points: &Vec<Point>) {
+    pub fn render_control(&mut self, points: &[Point]) {
         let text: String = format!("{:.5}", points[0].y.abs() * 10.0);
         let ctx = self.ctx.borrow();
         ctx.save();

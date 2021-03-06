@@ -4,11 +4,11 @@ use wasm_bindgen::JsCast;
 // use rand_os::OsRng;
 
 fn window() -> Result<web_sys::Window, String> {
-    web_sys::window().ok_or("No window".into())
+    web_sys::window().ok_or_else(|| "No window".into())
 }
 
 fn document() -> Result<web_sys::Document, String> {
-    window()?.document().ok_or("No document".into())
+    window()?.document().ok_or_else(|| "No document".into())
 }
 
 pub fn request_animation_frame(f: &Closure<dyn FnMut()>) {
@@ -21,7 +21,7 @@ pub fn request_animation_frame(f: &Closure<dyn FnMut()>) {
 pub fn get_wrapper_element(name: &str) -> Result<web_sys::HtmlElement, String> {
     let elem: web_sys::Element = document()?
         .get_element_by_id(name)
-        .ok_or(format!("No element: {}", name).to_string())?;
+        .ok_or(format!("No element: {}", name))?;
 
     Ok(elem
         .dyn_into::<web_sys::HtmlElement>()

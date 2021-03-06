@@ -1,12 +1,13 @@
 {
   "name": "perlin-experiment",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "private": false,
   "description": "A tiny WASM animation using Perlin Noise",
   "main": "public/index.html",
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{css,html,js}\"",
     "pretty": "pretty-quick",
+    "clippy": "cd src_for_wasm/perlin-wave && cargo clippy",
     "start": "webpack serve --config webpack.dev.js",
     "build:js": "webpack --config webpack.prod.js",
     "build:wasm:debug": "sh ./build.sh perlin-wave debug",

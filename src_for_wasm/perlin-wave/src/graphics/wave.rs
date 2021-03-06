@@ -16,7 +16,6 @@ pub struct WaveGraphics {
     pub height: f64,
     solar_info: SolarInfo,
     color: String,
-    color2: String,
 }
 
 impl Graphics for WaveGraphics {
@@ -43,13 +42,7 @@ impl Graphics for WaveGraphics {
 }
 
 impl WaveGraphics {
-    pub fn new(
-        id: &str,
-        width: f64,
-        height: f64,
-        color: &str,
-        color2: &str,
-    ) -> Result<WaveGraphics, String> {
+    pub fn new(id: &str, width: f64, height: f64, color: &str) -> Result<WaveGraphics, String> {
         let canvas = get_canvas(id, width, height)?;
         let ctx = get_ctx(&canvas)?;
         let solar_info = SolarInfo::new(height, (SEGMENTS as f64 * 0.4).round());
@@ -60,7 +53,6 @@ impl WaveGraphics {
             height,
             solar_info,
             color: color.into(),
-            color2: color2.into(),
         })
     }
 
@@ -68,7 +60,7 @@ impl WaveGraphics {
         self.height * 0.2
     }
 
-    pub fn render_radio(&mut self, points: &Vec<Point>, counter: u32) {
+    pub fn render_radio(&mut self, points: &[Point], counter: u32) {
         let half_h: f64 = self.height / 2.0;
         let amplify = self.amplify_value();
         let rel_pos: f64 = ease_in_out_quad(self.relative_pos_half(counter));
@@ -91,7 +83,7 @@ impl WaveGraphics {
         ctx.restore();
     }
 
-    pub fn render_bars(&mut self, points: &Vec<Point>, points_prev: &Vec<Point>, counter: u32) {
+    pub fn render_bars(&mut self, points: &[Point], points_prev: &[Point], counter: u32) {
         let unit_w: f64 = (self.width / SEGMENTS as f64) - 2.0;
         let half_h: f64 = self.height / 2.0;
         let amplify = self.amplify_value();
@@ -101,8 +93,7 @@ impl WaveGraphics {
         ctx.save();
         ctx.set_fill_style(&self.color.as_str().into());
 
-        let mut i: usize = 0;
-        for p in points {
+        for (i, p) in points.iter().enumerate() {
             let ratio = p.x / NORMAL_WIDTH;
             let x = 0_f64.lerp(self.width, ratio).round();
             let y = (points_prev[i].y.lerp(p.y, rel_pos) * amplify).round();
@@ -110,12 +101,11 @@ impl WaveGraphics {
             let unit_w = unit_w.round();
             ctx.fill_rect(x, half_h, unit_w, y);
             ctx.fill_rect(x, half_h, unit_w, -y);
-            i += 1;
         }
         ctx.restore();
     }
 
-    pub fn render_solar(&mut self, points: &Vec<Point>, points_prev: &Vec<Point>, counter: u32) {
+    pub fn render_solar(&mut self, points: &[Point], points_prev: &[Point], counter: u32) {
         let sol = self.solar_info.clone();
         let offset_x = self.width / 2.0;
         let offset_y = self.height / 2.0;

@@ -20,27 +20,24 @@ impl Panel for ControlPanel {
         self.g.clone()
     }
 
-    fn draw(&mut self, points: &Vec<Point>, _points_prev: &Vec<Point>, _counter: u32) {
+    fn draw(&mut self, points: &[Point], _points_prev: &[Point], _counter: u32) {
         let mut g = self.g.borrow_mut();
-        match g.as_any_mut().downcast_mut::<ControlGraphics>() {
-            Some(g) => {
-                g.clear();
-                g.render_control(&points);
-            }
-            None => {}
+        if let Some(g) = g.as_any_mut().downcast_mut::<ControlGraphics>() {
+            g.clear();
+            g.render_control(&points);
         }
     }
 }
 
 impl ControlPanel {
-    pub fn new(id: &str, color: &str, color2: &str) -> Result<ControlPanel, String> {
+    pub fn new(id: &str, color: &str) -> Result<ControlPanel, String> {
         let el: HtmlElement = get_wrapper_element(id)?;
         let width: f64 = el.offset_width() as f64; // i32
         let height: f64 = width as f64 / CONTROL_CANVAS_RATIO;
 
         web_sys::console::log_1(&(format!(">> {} x {}", width, height).into()));
 
-        let g: ControlGraphics = ControlGraphics::new(id, width, height, color, color2)?;
+        let g: ControlGraphics = ControlGraphics::new(id, width, height, color)?;
 
         Ok(ControlPanel {
             id: id.into(),
