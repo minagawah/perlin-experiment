@@ -10,7 +10,6 @@ use log::error;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
-// use std::panic;
 
 use crate::app::App;
 use crate::constants::FULL_CYCLE;
@@ -18,6 +17,7 @@ use crate::types::Config;
 
 pub fn exit(message: &str) {
     let v = wasm_bindgen::JsValue::from_str(&message.to_string());
+    web_sys::console::log_1(&(JsValue::from("panic")));
     web_sys::console::exception_1(&v);
     std::process::abort();
 }
@@ -28,22 +28,23 @@ pub fn start() {
 }
 
 #[wasm_bindgen(js_name = "run")]
-pub fn run(param: &JsValue) -> JsValue {
+pub fn run(param: &JsValue) -> Result<(), JsValue> {
+    console_error_panic_hook::set_once();
+
     let config: Config = param.into_serde().unwrap();
     web_sys::console::log_1(&(format!("{:?}", config).into()));
 
     match start_app(&config) {
-        Ok(s) => JsValue::from(s),
+        Ok(_) => Ok(()),
         Err(err) => {
-            error!("Error: {}", err);
-            JsValue::from(err)
+            web_sys::console::log_1(&(JsValue::from("error")));
+            // error!("Error: {}", err);
+            Err(JsValue::from(err))
         }
     }
 }
 
-pub fn start_app(config: &Config) -> Result<String, String> {
-    // panic::set_hook(Box::new(console_error_panic_hook::hook));
-
+pub fn start_app(config: &Config) -> Result<(), String> {
     let mut app = App::new(config)?;
 
     let mut counter: u32 = 0;
@@ -67,5 +68,5 @@ pub fn start_app(config: &Config) -> Result<String, String> {
 
     utils::request_animation_frame(g.borrow().as_ref().unwrap());
 
-    Ok("success".into())
+    Ok(())
 }

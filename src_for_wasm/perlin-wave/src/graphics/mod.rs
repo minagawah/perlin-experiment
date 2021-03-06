@@ -6,6 +6,7 @@ use std::any::Any;
 use std::rc::Rc;
 
 use crate::constants::{FILL_COLOR, FULL_CYCLE};
+use crate::exit;
 
 pub trait Graphics: Any {
     fn as_any(&self) -> &dyn Any;
@@ -21,6 +22,8 @@ pub trait Graphics: Any {
             ctx.clear_rect(0.0, 0.0, width, height);
             ctx.set_fill_style(&FILL_COLOR.into());
             ctx.fill_rect(0.0, 0.0, width, height);
+        } else {
+            exit("Failed to borrow: self.ctx() (clear)");
         }
     }
 

@@ -5,6 +5,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::HtmlElement;
 
+use crate::exit;
 use crate::graphics::wave::WaveGraphics;
 use crate::graphics::Graphics;
 use crate::panels::wave::GraphType::{Bars, Radio, Solar};
@@ -25,14 +26,19 @@ impl Panel for WavePanel {
     }
 
     fn draw(&mut self, points: &[Point], points_prev: &[Point], counter: u32) {
-        let mut g = self.g.borrow_mut();
-        if let Some(g) = g.as_any_mut().downcast_mut::<WaveGraphics>() {
-            g.clear();
-            match self.graph_type.get() {
-                GraphType::Radio => g.render_radio(points, counter),
-                GraphType::Bars => g.render_bars(points, points_prev, counter),
-                GraphType::Solar => g.render_solar(points, points_prev, counter),
+        if let Ok(mut g) = self.g.try_borrow_mut() {
+            if let Some(g) = g.as_any_mut().downcast_mut::<WaveGraphics>() {
+                g.clear();
+                match self.graph_type.get() {
+                    GraphType::Radio => g.render_radio(points, counter),
+                    GraphType::Bars => g.render_bars(points, points_prev, counter),
+                    GraphType::Solar => g.render_solar(points, points_prev, counter),
+                }
+            } else {
+                exit("Failed to downcast_mut::<WaveGraphics>()");
             }
+        } else {
+            exit("Failed to borrow: self.g (WavePanel::draw)");
         }
     }
 }
@@ -40,10 +46,7 @@ impl Panel for WavePanel {
 impl WavePanel {
     pub fn new(id: &str, width: f64, height: f64, color: &str) -> Result<WavePanel, String> {
         let el: HtmlElement = get_wrapper_element(id)?;
-
-        // let width: f64 = el.offset_width() as f64; // i32
-        // let height: f64 = (width as f64 / WAVE_CANVAS_RATIO).ceil();
-        web_sys::console::log_1(&(format!(">> {} x {}", width as u32, height as u32).into()));
+        web_sys::console::log_1(&(format!("(wave) {} x {}", width as u32, height as u32).into()));
 
         let g: WaveGraphics = WaveGraphics::new(id, width, height, color)?;
         let graph_type: Rc<Cell<GraphType>> = Rc::new(Cell::new(GraphType::Radio));
