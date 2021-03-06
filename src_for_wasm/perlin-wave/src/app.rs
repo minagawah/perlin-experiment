@@ -20,17 +20,25 @@ impl App {
         let color2: String = config.color2.clone();
 
         let mut panels = vec![];
+
         for panel in &config.panels {
             let id = panel.id.clone();
+            let width = panel.width;
+            let height = panel.height;
+
             match id.as_str() {
                 "wave" => {
                     let pane: Box<dyn Panel> =
-                        Box::new(WavePanel::new(id.as_str(), color.as_str())?);
+                        Box::new(WavePanel::new(id.as_str(), width, height, color.as_str())?);
                     panels.push(pane);
                 }
                 "control" => {
-                    let pane: Box<dyn Panel> =
-                        Box::new(ControlPanel::new(id.as_str(), color2.as_str())?);
+                    let pane: Box<dyn Panel> = Box::new(ControlPanel::new(
+                        id.as_str(),
+                        width,
+                        height,
+                        color2.as_str(),
+                    )?);
                     panels.push(pane);
                 }
                 _ => {}
