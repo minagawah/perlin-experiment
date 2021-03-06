@@ -41,7 +41,9 @@ impl App {
                     )?);
                     panels.push(pane);
                 }
-                _ => {}
+                _ => {
+                    return Err(format!("No such panel: {}", id));
+                }
             }
         }
 

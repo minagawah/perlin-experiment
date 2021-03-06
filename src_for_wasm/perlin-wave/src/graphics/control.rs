@@ -2,10 +2,10 @@ use core::cell::RefCell;
 use std::any::Any;
 use std::rc::Rc;
 
+use crate::exit;
+use crate::graphics::Graphics;
 use crate::types::Point;
 use crate::utils::{get_canvas, get_ctx};
-
-use crate::graphics::Graphics;
 
 pub struct ControlGraphics {
     ctx: Rc<RefCell<web_sys::CanvasRenderingContext2d>>,
@@ -59,12 +59,15 @@ impl ControlGraphics {
 
     pub fn render_control(&mut self, points: &[Point]) {
         let text: String = format!("{:.5}", points[0].y.abs() * 10.0);
-        let ctx = self.ctx.borrow();
-        ctx.save();
-        ctx.set_fill_style(&self.color.as_str().into());
-        ctx.set_font(self.font_style.as_str());
-        ctx.fill_text(text.as_str(), 5_f64, self.font_size as f64)
-            .unwrap_or(());
-        ctx.restore();
+        if let Ok(ctx) = self.ctx.try_borrow() {
+            ctx.save();
+            ctx.set_fill_style(&self.color.as_str().into());
+            ctx.set_font(self.font_style.as_str());
+            ctx.fill_text(text.as_str(), 5_f64, self.font_size as f64)
+                .unwrap_or(());
+            ctx.restore();
+        } else {
+            exit("Failed to borrow: self.ctx (render_control)");
+        }
     }
 }
