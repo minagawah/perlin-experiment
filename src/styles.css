@@ -66,6 +66,15 @@ code {
   height: 12px;
 }
 
+
+.box-green {
+  border: 2px solid #c0e822;
+}
+
+.box-green-dark {
+  border: 2px solid #759203;
+}
+
 .box-khaki {
   border: 2px solid #757703;
 }

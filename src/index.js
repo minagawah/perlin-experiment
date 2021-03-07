@@ -11,12 +11,12 @@ const CANVAS_PANELS = [
   {
     id: 'control',
     ratio: 15.0 / 1.0,
-    color: '#757703',
+    color: '#c0e822',
   },
   {
     id: 'wave',
     ratio: 3.0 / 1.0,
-    color: '#d3d626',
+    color: '#759203',
   },
 ];
 
