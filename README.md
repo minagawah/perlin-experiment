@@ -494,7 +494,7 @@ And, you certainly need to print a MIME header for `*.wasm` files.
 
 `webpack.dev.js`
 
-```
+```js
   devServer: {
     contentBase: path.resolve(__dirname, './public'),
     hot: true,
