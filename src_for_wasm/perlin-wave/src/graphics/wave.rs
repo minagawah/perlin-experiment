@@ -74,7 +74,7 @@ impl WaveGraphics {
 
     pub fn render_radio(&mut self, points: &[Point], counter: u32) {
         let half_h: f64 = self.height / 2.0;
-        let amplify = self.amplify_value();
+        let amplify: f64 = self.amplify_value();
         let rel_pos: f64 = ease_in_out_quad(self.relative_pos_half(counter));
 
         if let Ok(ctx) = self.ctx.try_borrow() {
@@ -86,7 +86,7 @@ impl WaveGraphics {
             for p in points {
                 let ratio = p.x / NORMAL_WIDTH;
                 let x = 0_f64.lerp(self.width, ratio).round(); // MIN.lerp(MAX, ratio)
-                let y = (0.0.lerp(p.y, rel_pos) * amplify + half_h).round();
+                let y = (0_f64.lerp(p.y, rel_pos) * amplify + half_h).round();
                 ctx.line_to(x, y);
             }
 
@@ -101,7 +101,7 @@ impl WaveGraphics {
     pub fn render_bars(&mut self, points: &[Point], points_prev: &[Point], counter: u32) {
         let unit_w: f64 = (self.width / SEGMENTS as f64) - 2.0;
         let half_h: f64 = self.height / 2.0;
-        let amplify = self.amplify_value();
+        let amplify: f64 = self.amplify_value();
 
         // Finding out where we are within `FULL_CYCLE`.
         // What we get is just a ratio between `0.0` and `1.0`.
