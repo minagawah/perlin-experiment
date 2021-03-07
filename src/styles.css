@@ -12,12 +12,12 @@ body {
 a,
 a:visited {
   text-decoration: underline;
-  color: #4aefba;
+  color: #c0e822;
 }
 
 a:hover,
 a:active {
-  color: #2d9473;
+  color: #759203;
 }
 
 code {
