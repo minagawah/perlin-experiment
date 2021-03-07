@@ -1,17 +1,32 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::str::FromStr;
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct PanelConfig {
-    pub id: String,
-    pub width: f64,
-    pub height: f64,
-    pub color: String,
-}
-
+/// Content of `panels` which is `HashMap<String, String>`
+/// will later be explicitly cast to `PanelConfig`.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
     pub bgcolor: String,
-    pub panels: Vec<PanelConfig>,
+    pub panels: Vec<HashMap<String, String>>,
+}
+
+/// Provides custom methods for `HashMap<String, String>`.
+pub trait PanelConfig {
+    fn ok(&self, key: &str) -> Result<String, String>;
+    fn ok_f64(&self, key: &str) -> Result<f64, String>;
+}
+
+impl PanelConfig for HashMap<String, String> {
+    fn ok(&self, key: &str) -> Result<String, String> {
+        match self.get(key) {
+            Some(value) => Ok(value.to_string()),
+            None => Err(format!("Failed to get: {}", key)),
+        }
+    }
+    fn ok_f64(&self, key: &str) -> Result<f64, String> {
+        let value = self.ok(key)?;
+        f64::from_str(value.as_str()).map_err(|e| e.to_string())
+    }
 }
 
 #[derive(Clone, Debug)]

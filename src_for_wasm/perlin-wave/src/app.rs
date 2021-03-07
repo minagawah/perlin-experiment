@@ -6,7 +6,7 @@ use crate::panels::control::ControlPanel;
 use crate::panels::wave::WavePanel;
 use crate::panels::Panel;
 use crate::perlin::noise_2d;
-use crate::types::{Config, Point};
+use crate::types::{Config, PanelConfig, Point};
 
 pub struct App {
     points: Vec<Point>,
@@ -21,10 +21,14 @@ impl App {
         let mut panels = vec![];
 
         for panel in &config.panels {
-            let id = panel.id.clone();
-            let width = panel.width;
-            let height = panel.height;
-            let color = panel.color.clone();
+            // Casting `PanelConfig` for `Vec<HashMap<String, String>>`
+            // so that custom methods `ok` and `ok_f64` will be available.
+            let panel: &dyn PanelConfig = panel;
+
+            let id = panel.ok("id")?;
+            let width = panel.ok_f64("width")?;
+            let height = panel.ok_f64("height")?;
+            let color = panel.ok("color")?;
 
             match id.as_str() {
                 "wave" => {

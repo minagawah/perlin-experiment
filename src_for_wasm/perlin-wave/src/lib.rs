@@ -32,8 +32,6 @@ pub fn run(param: &JsValue) -> Result<(), JsValue> {
     console_error_panic_hook::set_once();
 
     let config: Config = param.into_serde().unwrap();
-    web_sys::console::log_1(&(format!("{:?}", config).into()));
-
     match start_app(&config) {
         Ok(_) => Ok(()),
         Err(err) => {
