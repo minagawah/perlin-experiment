@@ -202,7 +202,7 @@ sh ./build.sh perlin-wave release
 
 and this is what we have in `build.sh`:
 
-```
+```bash
 #!/usr/bin/env bash
 
 APP=${1%\/}
