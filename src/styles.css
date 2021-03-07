@@ -12,12 +12,12 @@ body {
 a,
 a:visited {
   text-decoration: underline;
-  color: #4aefba;
+  color: #c0e822;
 }
 
 a:hover,
 a:active {
-  color: #2d9473;
+  color: #759203;
 }
 
 code {
@@ -64,6 +64,15 @@ code {
 .box {
   width: 12px;
   height: 12px;
+}
+
+
+.box-green {
+  border: 2px solid #c0e822;
+}
+
+.box-green-dark {
+  border: 2px solid #759203;
 }
 
 .box-khaki {
