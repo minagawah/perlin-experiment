@@ -85,7 +85,7 @@ impl WaveGraphics {
 
             for p in points {
                 let ratio = p.x / NORMAL_WIDTH;
-                let x = 0_f64.lerp(self.width, ratio).round();
+                let x = 0_f64.lerp(self.width, ratio).round(); // MIN.lerp(MAX, ratio)
                 let y = (0.0.lerp(p.y, rel_pos) * amplify + half_h).round();
                 ctx.line_to(x, y);
             }
@@ -102,6 +102,11 @@ impl WaveGraphics {
         let unit_w: f64 = (self.width / SEGMENTS as f64) - 2.0;
         let half_h: f64 = self.height / 2.0;
         let amplify = self.amplify_value();
+
+        // Finding out where we are within `FULL_CYCLE`.
+        // What we get is just a ratio between `0.0` and `1.0`.
+        // `0.0` being at the beginning of the cycle,
+        // and `1.0` being the end of the cycle.
         let rel_pos: f64 = self.relative_pos_full(counter);
 
         if let Ok(ctx) = self.ctx.try_borrow() {
@@ -111,10 +116,15 @@ impl WaveGraphics {
             for (i, p) in points.iter().enumerate() {
                 let ratio = p.x / NORMAL_WIDTH;
                 let x = 0_f64.lerp(self.width, ratio).round();
+                // We basically want to gradually move the bar
+                // from the previous position to the current.
+                // There, we need "rel_pos".
                 let y = (points_prev[i].y.lerp(p.y, rel_pos) * amplify).round();
                 let half_h = half_h.round();
                 let unit_w = unit_w.round();
+                // Drawing the upper part of the bar.
                 ctx.fill_rect(x, half_h, unit_w, y);
+                // Drawing the lower part of the bar.
                 ctx.fill_rect(x, half_h, unit_w, -y);
             }
             ctx.restore();
@@ -132,8 +142,18 @@ impl WaveGraphics {
         if let Ok(ctx) = self.ctx.try_borrow() {
             ctx.save();
             ctx.set_fill_style(&self.color.as_str().into());
+
+            // First, moving the canvas to the center.
             ctx.translate(offset_x, offset_y).unwrap_or(());
 
+            // The idea is to draw a horizontal bar
+            // at 3 o'clock position. However,
+            // everytime we draw the bar, we will
+            // rotate canvas in different angle.
+            // So, it is always a horizontal bar,
+            // but because it is rotated,
+            // we will have the effect of drawing
+            // a flower like bars.
             for i in 0..sol.segments as usize {
                 let p = points[i].clone();
                 let angle: f64 = i as f64 * sol.angle_step;
@@ -143,6 +163,8 @@ impl WaveGraphics {
                 let height = sol.size.round();
                 let y = -(height / 2.0).round();
 
+                // Notice it `save` and `restore`
+                // the canvas translation every time.
                 ctx.save();
                 ctx.rotate(angle * PI / 180.0).unwrap_or(());
                 ctx.fill_rect(x, y, width, height);
@@ -169,10 +191,10 @@ struct SolarInfo {
 impl SolarInfo {
     fn new(canvas_height: f64, segments: f64) -> SolarInfo {
         let angle_step = 360.0 / segments;
-        let diameter = canvas_height * 0.9;
+        let diameter = canvas_height * 0.99;
         let margin = (canvas_height - diameter) / 2.0;
         let radius = diameter / 2.0;
-        let radius_inner = radius * 0.65;
+        let radius_inner = radius * 0.55;
         let max_length = radius - radius_inner;
         let size = diameter * PI / segments * 0.2;
 

@@ -12,12 +12,12 @@ body {
 a,
 a:visited {
   text-decoration: underline;
-  color: #dc1c1c;
+  color: #4aefba;
 }
 
 a:hover,
 a:active {
-  color: #8c0000;
+  color: #2d9473;
 }
 
 code {
@@ -49,6 +49,7 @@ code {
 }
 
 #box-wrapper {
+  margin-top: 0.8em;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -56,7 +57,7 @@ code {
   justify-content: flex-end;
 }
 
-#box-wrapper > div:last-of-type {
+#box-wrapper > div:nth-of-type(n + 2) {
   margin-left: 4px;
 }
 
@@ -65,24 +66,40 @@ code {
   height: 12px;
 }
 
-.box-1-khaki {
+.box-khaki {
   border: 2px solid #757703;
 }
 
-.box-2-mustard {
-  margin-left: 4px;
+.box-mustard {
   border: 2px solid #d3d626;
 }
 
-.box-1-cyan {
+.box-red {
+  border: 2px solid #dc1c1c;
+}
+
+.box-red-dark {
+  border: 2px solid #8c0000;
+}
+
+.box-cyan {
   border: 2px solid #4aefba;
 }
 
-.box-2-pink {
+.box-cyan-dark {
+  border: 2px solid #2d9473;
+}
+
+.box-pink {
   border: 2px solid #ff498c;
 }
 
+.box-pink-dark {
+  border: 2px solid #9e2c56;
+}
+
 #info {
+  margin-top: 0.8em;
   width: 100%;
   display: flex;
   flex-direction: row;
