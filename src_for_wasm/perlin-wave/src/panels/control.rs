@@ -44,7 +44,7 @@ impl ControlPanel {
             &(format!("(control) {} x {}", width as u32, height as u32).into()),
         );
 
-        let g: ControlGraphics = ControlGraphics::new(id, width, height, bgcolor, color)?;
+        let g = ControlGraphics::new(id, width, height, bgcolor, color)?;
 
         Ok(ControlPanel {
             id: id.into(),

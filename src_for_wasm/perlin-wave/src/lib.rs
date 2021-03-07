@@ -29,14 +29,17 @@ pub fn start() {
 
 #[wasm_bindgen(js_name = "run")]
 pub fn run(param: &JsValue) -> Result<(), JsValue> {
+    // For all the unexpected `panic` are redirected to `console.error`.
     console_error_panic_hook::set_once();
 
     let config: Config = param.into_serde().unwrap();
     match start_app(&config) {
         Ok(_) => Ok(()),
         Err(err) => {
-            web_sys::console::log_1(&("error".into()));
             // error!("Error: {}", err);
+            web_sys::console::log_1(&("error".into()));
+            // When `Err` is returned, `wasm_bindgen` will
+            // automatically throw them as `Error` of JS.
             Err(JsValue::from(err))
         }
     }
