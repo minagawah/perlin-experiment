@@ -17,7 +17,7 @@ use crate::types::Config;
 
 pub fn exit(message: &str) {
     let v = wasm_bindgen::JsValue::from_str(&message.to_string());
-    web_sys::console::log_1(&(JsValue::from("panic")));
+    web_sys::console::log_1(&("panic".into()));
     web_sys::console::exception_1(&v);
     std::process::abort();
 }
@@ -35,7 +35,7 @@ pub fn run(param: &JsValue) -> Result<(), JsValue> {
     match start_app(&config) {
         Ok(_) => Ok(()),
         Err(err) => {
-            web_sys::console::log_1(&(JsValue::from("error")));
+            web_sys::console::log_1(&("error".into()));
             // error!("Error: {}", err);
             Err(JsValue::from(err))
         }
