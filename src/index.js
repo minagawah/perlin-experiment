@@ -43,8 +43,8 @@ function panelsReducer(acc = [], { id, ratio, color }) {
   const key = `#${id}`;
   const el = document.querySelector(key);
   if (el) {
-    const width = el.offsetWidth || 0;
-    const height = width / ratio;
+    const width = (el.offsetWidth || 0).toFixed(1);
+    const height = (width / ratio).toFixed(1);
     acc.push({
       id,
       color,
