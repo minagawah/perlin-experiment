@@ -265,22 +265,20 @@ const WASM_PATH =
     ? 'wasm/perlin-wave/perlin-wave_bg.wasm'
     : void 0;
 
-const CANVAS_PANELS = [
-  {
-    id: 'control',
-    ratio: 15.0 / 1.0,
-    color: '#c0e822',
-  },
-  {
-    id: 'wave',
-    ratio: 3.0 / 1.0,
-    color: '#759203',
-  },
-];
-
 const APP_CONFIG = {
   bgcolor: '#222',
-  panels: CANVAS_PANELS.reduce(panelsReducer, []),
+  panels: [
+    {
+      id: 'control',
+      ratio: 15.0 / 1.0,
+      color: '#c0e822',
+    },
+    {
+      id: 'wave',
+      ratio: 3.0 / 1.0,
+      color: '#759203',
+    },
+  ].reduce(panelsReducer, []),
 };
 
 document.addEventListener('DOMContentLoaded', () => {
