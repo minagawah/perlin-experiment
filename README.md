@@ -10,8 +10,8 @@ Click the canvas to toggle between 3 different visualization modes.
 [1. About](#1-about)  
 [2. Dev + Build](#2-dev--build)  
 [3. What I Did](#3-what-i-did)  
-&nbsp; &nbsp; [[Step 1] Source Directory for WASM](#step-1-source-directory-for-wasm)  
-&nbsp; &nbsp; [[Step 2] Build Directory for WASM](#step-2-build-directory-for-wasm)  
+&nbsp; &nbsp; [[Step 1] Creating Source Directory](#step-1-creating-source-directory)  
+&nbsp; &nbsp; [[Step 2] Creating Build Directory](#step-2-creating-build-directory)  
 &nbsp; &nbsp; [[Step 3] Writing `build.sh`](#step-3-writing-buildsh)  
 &nbsp; &nbsp; [[Step 4] Subdirectory Issue](#step-4-subdirectory-issue)  
 &nbsp; &nbsp; [[Step 5] Creating a Symlink](#step-5-creating-a-symlink)  
@@ -23,32 +23,33 @@ Click the canvas to toggle between 3 different visualization modes.
 &nbsp; &nbsp; [4-2. Babel](#4-2-babel)  
 &nbsp; &nbsp; [4-3. Webpack](#4-4-webpack)  
 &nbsp; &nbsp; [4-4. Other Build Tools](#4-4-other-build-tools)  
-[5. LICENSE](#5-license)
+[5. References](#5-references)  
+[6. LICENSE](#6-license)
 
 ## 1. About
 
-- Generating an organic looking wave using Perlin Noise
-- Click the canvas to toggle between 3 different visualization modes (Wave/Equalizer/Solar).
-- Show the current amplitude value in a control panel underneath
-- So, the app is handling 2 DOM elements: `#wave` and `#control`
+While majority of the codes are dedicated for animations, this app intends:
 
-I have some example apps from the past:
+1. to demonstrate the use of [wasm-pack](https://github.com/rustwasm/wasm-pack) to build a WASM app,
+2. to bind the WASM app to specific DOM element(s), and
+3. to pass configurations from JS to the WASM app.
 
-- [wasm-pack-canvas-example](https://github.com/minagawah/wasm-pack-canvas-example)
-  - Has exactly the same setup
-- [iced-dynamic-import-sample](https://github.com/minagawah/iced-dynamic-import-sample)
-  - Similar, but it uses `wasm-bindgen` intead of `wasm-pack`
+Here are the features:
 
-So, the descriptions are almost the same as the ones above,
-and most of what I have in this README is a repetition.
+- Handles 2 DOM elements: `#wave` and `#control`
+- Generates organic looking waves using [Perlin Noise](#5-references)
+- Clicking the canvas to toggle between 3 modes: _Wave, Equalizer, and Solar_
+- Displays the current amplitude value in control panel
 
-Yet, remember, the key is **_to make a symlink from the JS to the built WASM files._**  
-When Webpack tries to look for `perlin-wave` which is a WASM package,
-Webpack can look up the package because I did `yarn link "perlin-link"`
-in the JS source directory.
+The key is _**to make a symlink**_ from JS to the WASM package.  
+Without the symlink, Webpack is NOT able to find the package.  
+In our case, for Webpack to locate `perlin-wave`, I must run:
 
-Just like I did in the previous examples,
-it would be worth showing the directory structure:
+```bash
+yarn link "perlin-wave"
+```
+
+To get a grasp of what I mean, take a look at the app structure:
 
 ```
 ├── build.sh
@@ -141,16 +142,18 @@ Further details described in:
 # 3. What I Did - [Step 5] Creating a Symlink
 ```
 
-Once you have the WASM built and the symlink, then you are all set for development.  
-Here is a possible scenario:
+Once you have the WASM built and the symlink, then you are all set for development.
+
+Run the following:
 
 ```
-# Frist, build WASM files.
-yarn build:wasm
-
-# Next, start a dev server at: localhost:8080
 yarn start
 ```
+
+it will first run a debug build for WASM.
+Once it is done, it will start a devServer at:
+
+http://localhost:8080
 
 ### Prod
 
@@ -166,27 +169,41 @@ yarn build
 
 Many steps are similar to my previous example,
 [iced-dynamic-import-sample](https://github.com/minagawah/iced-dynamic-import-sample),
-but instead of using `wasm-bindgen`, this time, using `wasm-pack`.
+but using
+[wasm-pack](https://github.com/rustwasm/wasm-pack)
+this time instead of using
+[wasm-bindgen](https://github.com/rustwasm/wasm-bindgen).
 
 When imporing WASM from JS, we need special preparations.  
 I will describe the steps in detail:
 
-#### [Step 1] Source Directory for WASM
+#### [Step 1] Creating Source Directory
 
-Creating source directory for Rust: `src_for_wasm/perlin-wave`
+First of all, I need a source directory:
 
-```
+```bash
 mkdir src_for_wasm
 cargo new perlin-wave
 cd perlin-wave
 ```
 
-#### [Step 2] Build Directory for WASM
+#### [Step 2] Creating Build Directory
 
-When running `cargo build`, it builds the binaries to
-`src_for_wasm/perlin-wave/target/wasm32-unknown-unknown/release/*.wasm`.
-Out of this, `wasm-pack` generates a package into `public/wasm/perlin-wave`.
-So, we need to prepare the directory:
+Secondly, I need a build directory.
+
+When running `cargo build`, it will emit binaries under:
+
+```bash
+src_for_wasm/perlin-wave/target/wasm32-unknown-unknown/release/*.wasm
+```
+
+`wasm-pack` will use these files to generate a package under:
+
+```bash
+public/wasm/perlin-wave
+```
+
+So, I must create one.
 
 ```
 mkdir -p public/wasm/perlin-wave
@@ -194,13 +211,13 @@ mkdir -p public/wasm/perlin-wave
 
 #### [Step 3] Writing `build.sh`
 
-When running `yarn build:wasm`, it will execute:
+By running `yarn build:wasm`, I am runing:
 
-```
+```bash
 sh ./build.sh perlin-wave release
 ```
 
-and this is what we have in `build.sh`:
+Let's have a look at `build.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -217,9 +234,9 @@ cd "$SRC_DIR"
 wasm-pack build "--$PROFILE" --target web --out-name "$APP" --out-dir "$OUT_DIR"
 ```
 
-This will output `perlin-wave` package in `public/wasm/perlin-wave`:
+Running `build.sh` will generate the following files:
 
-```
+```bash
 $ ls -1 public/wasm/perlin-wave/
 package.json
 perlin-wave_bg.wasm
@@ -228,7 +245,7 @@ perlin-wave.d.ts
 perlin-wave.js
 ```
 
-`public/wasm/perlin-wave/package.json`
+`public/wasm/perlin-wave/package.json`:
 
 ```json
 {
@@ -244,7 +261,9 @@ perlin-wave.js
 
 #### [Step 4] Subdirectory Issue
 
-For HTML & JS, we want these:
+Now, let me talk about _serving path_...
+
+Let's first take a look at HTML:
 
 ```html
 <div id="container">
@@ -254,6 +273,8 @@ For HTML & JS, we want these:
   </div>
 </div>
 ```
+
+and JS:
 
 ```js
 import init, * as PerlinWave from 'perlin-wave';
@@ -319,14 +340,16 @@ function panelsReducer(acc = [], { id, ratio, color, color2 }) {
 }
 ```
 
-It is a bit long, but if you take a closer look,
-you will notice it is mostly doing things
-that has nothing to do with using wasm files,
-but just calculating for width and height of the wrapper elements.
+You will notice it mainly does nothing about WASM app,
+but just calculates `width` and `height`.
 
-However, you may notice what the heck `WASM_PATH` is all about?  
-Why it is passing `WASM_PATH` as an argument?  
-Well, this is about the "directory" you serve your assets from.  
+However, if you take a closer look,
+you will notice a weird constant `WASM_PATH`
+being passed as an argument.
+What the heck is this all about?
+Why is it passing `WASM_PATH` as an argument?
+
+Well, this is about the _directory_ you want to serve your assets from.  
 If I were to serve my assets from site's directory root, there is no need for passing the argument.  
 Like this:
 
@@ -610,7 +633,20 @@ yarn add --dev prettier pretty-quick
 
 &nbsp;
 
-## 5. License
+## 5. References
+
+- The Perlin noise math FAQ  
+  https://mzucker.github.io/html/perlin-noise-math-faq.html
+- Perlin noise (article) | Noise | Khan Academy  
+  https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-noise/a/perlin-noise
+- Understanding Perlin Noise  
+  https://adrianb.io/2014/08/09/perlinnoise.html
+- Perlin Noise: A Procedural Generation Algorithm  
+  https://rtouti.github.io/graphics/perlin-noise-algorithm
+
+&nbsp;
+
+## 6. License
 
 Dual-licensed under either of the followings.  
 Choose at your option.
