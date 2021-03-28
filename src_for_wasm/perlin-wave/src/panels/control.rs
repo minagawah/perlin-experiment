@@ -39,6 +39,7 @@ impl ControlPanel {
         height: f64,
         bgcolor: &str,
         color: &str,
+        _color2: &str,
     ) -> Result<ControlPanel, String> {
         web_sys::console::log_1(
             &(format!("(control) {} x {}", width as u32, height as u32).into()),

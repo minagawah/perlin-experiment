@@ -56,7 +56,8 @@ impl WaveGraphics {
     ) -> Result<WaveGraphics, String> {
         let canvas = get_canvas(id, width, height)?;
         let ctx = get_ctx(&canvas)?;
-        let solar_info = SolarInfo::new(height, (SEGMENTS as f64 * 0.4).round());
+        let num_of_bars = (SEGMENTS as f64 * 0.4).round();
+        let solar_info = SolarInfo::new(height, num_of_bars);
 
         Ok(WaveGraphics {
             ctx: Rc::new(RefCell::new(ctx)),
@@ -154,7 +155,7 @@ impl WaveGraphics {
             // but because it is rotated,
             // we will have the effect of drawing
             // a flower like bars.
-            for i in 0..sol.segments as usize {
+            for i in 0..sol.num_of_bars as usize {
                 let p = points[i].clone();
                 let angle: f64 = i as f64 * sol.angle_step;
                 let x = sol.radius_inner.round();
@@ -179,7 +180,7 @@ impl WaveGraphics {
 
 #[derive(Clone)]
 struct SolarInfo {
-    segments: f64,
+    num_of_bars: f64,
     margin: f64,
     radius: f64,
     radius_inner: f64,
@@ -189,17 +190,20 @@ struct SolarInfo {
 }
 
 impl SolarInfo {
-    fn new(canvas_height: f64, segments: f64) -> SolarInfo {
-        let angle_step = 360.0 / segments;
+    fn new(canvas_height: f64, num_of_bars: f64) -> SolarInfo {
+        let angle_step = 360.0 / num_of_bars;
         let diameter = canvas_height * 0.99;
         let margin = (canvas_height - diameter) / 2.0;
         let radius = diameter / 2.0;
         let radius_inner = radius * 0.55;
         let max_length = radius - radius_inner;
-        let size = diameter * PI / segments * 0.2;
+        let size = diameter * PI / num_of_bars * 0.2;
+
+        web_sys::console::log_1(&(format!("(SolarInfo) num_of_bars: {}", num_of_bars).into()));
+        web_sys::console::log_1(&(format!("(SolarInfo) size: {}", size).into()));
 
         SolarInfo {
-            segments,
+            num_of_bars,
             margin,
             radius,
             radius_inner,

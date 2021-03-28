@@ -265,18 +265,23 @@ const WASM_PATH =
     ? 'wasm/perlin-wave/perlin-wave_bg.wasm'
     : void 0;
 
+const COLOR = '#c0e822';
+const COLOR_DARK = '#759203';
+
 const APP_CONFIG = {
   bgcolor: '#222',
   panels: [
     {
       id: 'control',
       ratio: 15.0 / 1.0,
-      color: '#c0e822',
+      color: COLOR,
+      color2: COLOR_DARK,
     },
     {
       id: 'wave',
       ratio: 3.0 / 1.0,
-      color: '#759203',
+      color: COLOR,
+      color2: COLOR_DARK,
     },
   ].reduce(panelsReducer, []),
 };
@@ -295,7 +300,7 @@ if (typeof module.hot !== 'undefined') {
   module.hot.accept();
 }
 
-function panelsReducer(acc = [], { id, ratio, color }) {
+function panelsReducer(acc = [], { id, ratio, color, color2 }) {
   const key = `#${id}`;
   const el = document.querySelector(key);
   if (el) {
@@ -304,6 +309,7 @@ function panelsReducer(acc = [], { id, ratio, color }) {
     acc.push({
       id,
       color,
+      color2,
       width,
       height,
     });

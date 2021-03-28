@@ -49,12 +49,13 @@ impl WavePanel {
         width: f64,
         height: f64,
         bgcolor: &str,
-        color: &str,
+        _color: &str,
+        color2: &str,
     ) -> Result<WavePanel, String> {
         let el: HtmlElement = get_wrapper_element(id)?;
         web_sys::console::log_1(&(format!("(wave) {} x {}", width as u32, height as u32).into()));
 
-        let g = WaveGraphics::new(id, width, height, bgcolor, color)?;
+        let g = WaveGraphics::new(id, width, height, bgcolor, color2)?;
         let graph_type: Rc<Cell<GraphType>> = Rc::new(Cell::new(GraphType::Radio));
 
         let graph_type_clone = graph_type.clone();

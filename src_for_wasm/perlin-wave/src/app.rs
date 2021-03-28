@@ -29,6 +29,7 @@ impl App {
             let width = panel.ok_f64("width")?;
             let height = panel.ok_f64("height")?;
             let color = panel.ok("color")?;
+            let color2 = panel.ok("color2")?;
 
             match id.as_str() {
                 "wave" => {
@@ -38,6 +39,7 @@ impl App {
                         height,
                         bgcolor.as_str(),
                         color.as_str(),
+                        color2.as_str(),
                     )?);
                     panels.push(pane);
                 }
@@ -48,6 +50,7 @@ impl App {
                         height,
                         bgcolor.as_str(),
                         color.as_str(),
+                        color2.as_str(),
                     )?);
                     panels.push(pane);
                 }
