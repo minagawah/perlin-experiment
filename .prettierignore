@@ -1,7 +1,12 @@
 /public
 /node_modules
-package.json
 /src_for_wasm
+.gitignore
+.prettierignore
+build.sh
+LICENSE*
+*.png
+package-lock.json
+package.json
 yarn-error.log
 yarn.lock
-package-lock.json

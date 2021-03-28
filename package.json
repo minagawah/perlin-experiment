@@ -1,18 +1,18 @@
 {
   "name": "perlin-experiment",
-  "version": "0.1.31",
+  "version": "0.1.32",
   "private": false,
   "description": "A tiny WASM animation using Perlin Noise",
   "main": "public/index.html",
   "scripts": {
-    "prettier": "prettier --write \"src/**/*.{css,html,js}\"",
+    "prettier": "prettier --write \"*\" \"src/**/*.{css,html,js}\"",
     "pretty": "pretty-quick",
     "clippy": "cd src_for_wasm/perlin-wave && cargo clippy",
     "start": "webpack serve --config webpack.dev.js",
     "build:js": "webpack --config webpack.prod.js",
     "build:wasm:debug": "sh ./build.sh perlin-wave debug",
     "build:wasm": "sh ./build.sh perlin-wave release",
-    "build": "$npm_execpath run build:wasm & $npm_execpath run build:js"
+    "build": "$npm_execpath run build:wasm && $npm_execpath run build:js"
   },
   "repository": "https://github.com/minagawah/perlin-experiment.git",
   "keywords": [
