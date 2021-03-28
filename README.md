@@ -278,23 +278,23 @@ const CANVAS_PANELS = [
   },
 ];
 
-document.addEventListener('DOMContentLoaded', onload);
+const APP_CONFIG = {
+  bgcolor: '#222',
+  panels: CANVAS_PANELS.reduce(panelsReducer, []),
+};
 
-if (typeof module.hot !== 'undefined') {
-  module.hot.accept();
-}
-
-function onload() {
+document.addEventListener('DOMContentLoaded', () => {
   init(WASM_PATH)
     .then(() => {
-      PerlinWave.run({
-        bgcolor: '#222',
-        panels: CANVAS_PANELS.reduce(panelsReducer, []),
-      });
+      PerlinWave.run(APP_CONFIG);
     })
     .catch(err => {
       console.error(err);
     });
+});
+
+if (typeof module.hot !== 'undefined') {
+  module.hot.accept();
 }
 
 function panelsReducer(acc = [], { id, ratio, color }) {
