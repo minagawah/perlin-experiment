@@ -2,6 +2,7 @@ use core::cell::RefCell;
 use std::any::Any;
 use std::rc::Rc;
 
+use crate::constants::FONT_FAMILY;
 use crate::exit;
 use crate::graphics::Graphics;
 use crate::types::Point;
@@ -56,7 +57,7 @@ impl ControlGraphics {
         let ctx = get_ctx(&canvas)?;
 
         let font_size: u32 = (height * 0.8) as u32;
-        let font_style: String = format!("{}px serif", font_size);
+        let font_style: String = format!("{}px {}", font_size, FONT_FAMILY);
 
         Ok(ControlGraphics {
             ctx: Rc::new(RefCell::new(ctx)),

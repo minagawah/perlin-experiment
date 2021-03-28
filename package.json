@@ -7,7 +7,7 @@
   "scripts": {
     "prettier": "prettier --write \"*\" \"src/**/*.{css,html,js}\"",
     "pretty": "pretty-quick",
-    "clippy": "cd src_for_wasm/perlin-wave && cargo clippy",
+    "clippy": "cd src_for_wasm/perlin-wave && cargo fmt && cargo clippy",
     "dev": "webpack serve --config webpack.dev.js",
     "build:js": "webpack --config webpack.prod.js",
     "build:wasm:debug": "sh ./build.sh perlin-wave debug",
