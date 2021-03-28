@@ -18,7 +18,7 @@ Click the canvas to toggle between 3 different visualization modes.
 &nbsp; &nbsp; [[Step 6] `wasm-loader`](#step-6-wasm-loader)  
 &nbsp; &nbsp; [[Step 7] `import.meta` (or `file://`)](#step-7-importmeta-or-file)  
 &nbsp; &nbsp; [[Step 8] `application/wasm`](#step-8-applicationwasm)  
-[4. Installed NPM Packages](#3-installed-npm-packages)  
+[4. Installed NPM Packages](#4-installed-npm-packages)  
 &nbsp; &nbsp; [4-1. All](#4-1-all)  
 &nbsp; &nbsp; [4-2. Babel](#4-2-babel)  
 &nbsp; &nbsp; [4-3. Webpack](#4-4-webpack)  
